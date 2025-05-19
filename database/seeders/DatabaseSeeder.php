@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User\Admin;
+use App\Models\User\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +16,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        if ( ! Admin::query()->where('username' , 'admin' )->exists())
+            Admin::factory()->create([
+                'first_name' => 'کاربر',
+                'last_name' => 'ادمین',
+                'username' => 'admin',
+                'password' => Hash::make('password'),
+                'remember_token' => Str::random(10),
+            ]);
+        if ( Admin::query()->count() < 50)
+            Admin::factory(50)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+
+        $this->call(AgeRangeSeeder::class);
+
+        if ( User::query()->count() < 100) {
+            User::factory(30)->create();
+            User::factory(30)->withProfiles(1)->create();
+            User::factory(30)->withProfiles(2)->create();
+            User::factory(10)->withProfiles(3)->create();
+        }
+
+        $this->call(CountriesSeeder::class);
     }
 }
