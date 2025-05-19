@@ -4,29 +4,22 @@ namespace App\Models\Movie;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 /**
  * @property int $id
  * @property string $title
  * @property string $slug
- * @property boolean $for_kids
- * @property boolean $hide_from_kids
  * @property integer $sort
  */
-class Genre extends Model
+class CrewPosition extends Model
 {
     public $timestamps = false;
     protected $fillable = [
         'title',
         'slug',
-        'for_kids',
-        'hide_from_kids',
         'sort',
     ];
 
     protected $casts = [
-        'for_kids' => 'boolean',
-        'hide_from_kids' => 'boolean',
         'sort' => 'int',
     ];
 }

@@ -37,33 +37,41 @@ class CountriesSeeder extends Seeder
                 continue;
             $lowerCode = Str::lower($country['code']);
             $persianName = $persianNames[Str::upper($country['code'])] ?? $country['name'];
-            try {
-                $flagUrl = "https://flagcdn.com/w40/{$lowerCode}.png";
-                $flagContent = Http::get($flagUrl)->body();
-                Storage::disk('public')->put("{$flagDirectory}/icon/{$lowerCode}.png", $flagContent);
-            } catch (\Exception $e) {
-                Log::error("Failed to download flag for {$lowerCode} - icon: {$e->getMessage()}");
+            if ( !file_exists(storage_path("app/public/{$flagDirectory}/icon/{$lowerCode}.png"))) {
+                try {
+                    $flagUrl = "https://flagcdn.com/w40/{$lowerCode}.png";
+                    $flagContent = Http::get($flagUrl)->body();
+                    Storage::disk('public')->put("{$flagDirectory}/icon/{$lowerCode}.png", $flagContent);
+                } catch (\Exception $e) {
+                    Log::error("Failed to download flag for {$lowerCode} - icon: {$e->getMessage()}");
+                }
             }
-            try {
-                $flagUrl = "https://flagcdn.com/w160/{$lowerCode}.png";
-                $flagContent = Http::get($flagUrl)->body();
-                Storage::disk('public')->put("{$flagDirectory}/medium/{$lowerCode}.png", $flagContent);
-            } catch (\Exception $e) {
-                Log::error("Failed to download flag for {$lowerCode} - medium: {$e->getMessage()}");
+            if ( !file_exists(storage_path("app/public/{$flagDirectory}/medium/{$lowerCode}.png"))) {
+                try {
+                    $flagUrl = "https://flagcdn.com/w160/{$lowerCode}.png";
+                    $flagContent = Http::get($flagUrl)->body();
+                    Storage::disk('public')->put("{$flagDirectory}/medium/{$lowerCode}.png", $flagContent);
+                } catch (\Exception $e) {
+                    Log::error("Failed to download flag for {$lowerCode} - medium: {$e->getMessage()}");
+                }
             }
-            try {
-                $flagUrl = "https://flagcdn.com/w640/{$lowerCode}.png";
-                $flagContent = Http::get($flagUrl)->body();
-                Storage::disk('public')->put("{$flagDirectory}/normal/{$lowerCode}.png", $flagContent);
-            } catch (\Exception $e) {
-                Log::error("Failed to download flag for {$lowerCode} - normal: {$e->getMessage()}");
+            if ( !file_exists(storage_path("app/public/{$flagDirectory}/normal/{$lowerCode}.png"))) {
+                try {
+                    $flagUrl = "https://flagcdn.com/w640/{$lowerCode}.png";
+                    $flagContent = Http::get($flagUrl)->body();
+                    Storage::disk('public')->put("{$flagDirectory}/normal/{$lowerCode}.png", $flagContent);
+                } catch (\Exception $e) {
+                    Log::error("Failed to download flag for {$lowerCode} - normal: {$e->getMessage()}");
+                }
             }
-            try {
-                $flagUrl = "https://flagcdn.com/w2560/{$lowerCode}.png";
-                $flagContent = Http::get($flagUrl)->body();
-                Storage::disk('public')->put("{$flagDirectory}/large/{$lowerCode}.png", $flagContent);
-            } catch (\Exception $e) {
-                Log::error("Failed to download flag for {$lowerCode} - large: {$e->getMessage()}");
+            if ( !file_exists(storage_path("app/public/{$flagDirectory}/large/{$lowerCode}.png"))) {
+                try {
+                    $flagUrl = "https://flagcdn.com/w2560/{$lowerCode}.png";
+                    $flagContent = Http::get($flagUrl)->body();
+                    Storage::disk('public')->put("{$flagDirectory}/large/{$lowerCode}.png", $flagContent);
+                } catch (\Exception $e) {
+                    Log::error("Failed to download flag for {$lowerCode} - large: {$e->getMessage()}");
+                }
             }
             Country::query()->insert([
                 'name' => $persianName ,

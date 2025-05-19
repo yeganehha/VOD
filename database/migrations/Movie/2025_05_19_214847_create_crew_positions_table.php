@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('genres', function (Blueprint $table) {
+        Schema::create('crew_positions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->boolean('for_kids')->default(false);
-            $table->boolean('hide_from_kids')->default(false);
             $table->integer('sort')->default(0);
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('genres');
+        Schema::dropIfExists('crew_positions');
     }
 };

@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "bezhansalleh/filament-shield": "^3.3",
+        "davidhsianturi/blade-bootstrap-icons": "^2.0",
         "filament/filament": "^3.3",
         "flowframe/laravel-trend": "^0.4.0",
         "guava/filament-clusters": "^1.5",

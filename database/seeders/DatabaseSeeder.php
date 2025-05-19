@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Movie\Crew;
 use App\Models\User\Admin;
 use App\Models\User\User;
 use Illuminate\Database\Seeder;
@@ -35,6 +36,15 @@ class DatabaseSeeder extends Seeder
             User::factory(30)->withProfiles(1)->create();
             User::factory(30)->withProfiles(2)->create();
             User::factory(10)->withProfiles(3)->create();
+        }
+
+        $this->call(GenreSeeder::class);
+        $this->call(CrewPositionSeeder::class);
+
+
+        if ( Crew::query()->count() < 100) {
+            Crew::factory(70)->create();
+            Crew::factory(30)->dead()->create();
         }
 
         $this->call(CountriesSeeder::class);
