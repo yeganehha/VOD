@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property string $name
+ * @property string $title
+ * @property string $title_en
  * @property string $code
  * @property string $flag
  * @property string $icon
@@ -19,7 +20,8 @@ class Country extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        'name',
+        'title',
+        'title_en',
         'code',
         'flag',
     ];

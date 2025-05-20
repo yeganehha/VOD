@@ -74,7 +74,8 @@ class CountriesSeeder extends Seeder
                 }
             }
             Country::query()->insert([
-                'name' => $persianName ,
+                'title' => $persianName ,
+                'title_en' => $country['name'] ,
                 'code' => Str::upper($country['code']) ,
                 'flag' => $lowerCode ,
             ]);
