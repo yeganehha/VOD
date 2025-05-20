@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(CountriesSeeder::class);
+        $this->call(GenreSeeder::class);
+        $this->call(CrewPositionSeeder::class);
+
         if ( ! Admin::query()->where('username' , 'admin' )->exists())
             Admin::factory()->create([
                 'first_name' => 'کاربر',
@@ -38,8 +42,6 @@ class DatabaseSeeder extends Seeder
             User::factory(10)->withProfiles(3)->create();
         }
 
-        $this->call(GenreSeeder::class);
-        $this->call(CrewPositionSeeder::class);
 
 
         if ( Crew::query()->count() < 100) {
@@ -47,6 +49,5 @@ class DatabaseSeeder extends Seeder
             Crew::factory(30)->dead()->create();
         }
 
-        $this->call(CountriesSeeder::class);
     }
 }
