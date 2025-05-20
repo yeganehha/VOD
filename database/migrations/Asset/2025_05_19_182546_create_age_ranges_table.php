@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('age_ranges', function (Blueprint $table) {
             $table->id();
             $table->string('title' );
+            $table->integer('from_age');
+            $table->integer('to_age');
             $table->boolean('is_kid' )->default(false);
             $table->integer('sort')->default(0);
             $table->softDeletes();
