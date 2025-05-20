@@ -27,6 +27,7 @@ class PaymentServiceProvider extends ServiceProvider
         foreach (glob(app_path('Services/Payment/routes/*.php')) as $routeFile) {
             $this->loadRoutesFrom($routeFile);
         }
-        $this->mergeConfigFrom(app_path('Services/Payment/config/payment.php') , 'payment');
+        if ( ! empty(config('app.key')) )
+            $this->mergeConfigFrom(app_path('Services/Payment/config/payment.php') , 'payment');
     }
 }
