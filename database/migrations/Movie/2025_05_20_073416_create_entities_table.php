@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('entities', function (Blueprint $table) {
-            $table->string('id')->unique();
+            $table->uuid('id')->primary();
             $table->string('title');
             $table->string('title_en');
             $table->string('second_title')->nullable();
@@ -35,21 +35,25 @@ return new class extends Migration
             $table->timestamps();
         });
         Schema::create('entity_country', function (Blueprint $table) {
-            $table->foreignId('entity_id')->constrained('entities')->cascadeOnDelete();
+            $table->uuid('entity_id')->index();
+            $table->foreign('entity_id')->references('id')->on('entities')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
         });
         Schema::create('entity_covers', function (Blueprint $table) {
-            $table->foreignId('entity_id')->constrained('entities')->cascadeOnDelete();
+            $table->uuid('entity_id')->index();
+            $table->foreign('entity_id')->references('id')->on('entities')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('ratio_type')->nullable();
             $table->enum('cover_type' , \App\Enums\CoverType::values())->default(\App\Enums\CoverType::Image->value);
         });
         Schema::create('entity_genres', function (Blueprint $table) {
-            $table->foreignId('entity_id')->constrained('entities')->cascadeOnDelete();
+            $table->uuid('entity_id')->index();
+            $table->foreign('entity_id')->references('id')->on('entities')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('genre_id')->constrained('genres')->cascadeOnDelete();
         });
         Schema::create('movies', function (Blueprint $table) {
-            $table->string('id')->unique();
-            $table->foreignId('entity_id')->constrained('entities')->cascadeOnDelete();
+            $table->uuid('id')->unique();
+            $table->uuid('entity_id')->index();
+            $table->foreign('entity_id')->references('id')->on('entities')->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('is_high_definition')->default(false);
             $table->foreignId('age_range_id')->nullable()->constrained('age_ranges')->nullOnDelete();
             $table->string('main_audio')->nullable();
@@ -73,6 +77,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entities');
+        Schema::drop('entities','entity_country','entity_covers','entity_genres','movies');
     }
 };

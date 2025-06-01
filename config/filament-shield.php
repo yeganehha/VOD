@@ -7,6 +7,7 @@ return [
         'navigation_sort' => -1,
         'navigation_badge' => false,
         'navigation_group' => true,
+        'sub_navigation_position' => null,
         'is_globally_searchable' => false,
         'show_model_path' => false,
         'is_scoped_to_tenant' => true,
@@ -85,7 +86,7 @@ return [
     ],
 
     'register_role_policy' => [
-        'enabled' => false,
+        'enabled' => true,
     ],
 
 ];

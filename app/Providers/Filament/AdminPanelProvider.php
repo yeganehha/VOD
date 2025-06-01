@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Admin\Pages\Login;
+use App\Filament\Pages\Login;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -30,7 +30,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('')
             ->authGuard('admin')
-            ->login()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -76,6 +75,7 @@ class AdminPanelProvider extends PanelProvider
                 url: asset('assets/css/fonts.css'),
                 provider: LocalFontProvider::class,
             )
+            ->login(Login::class)
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
                     ->gridColumns([

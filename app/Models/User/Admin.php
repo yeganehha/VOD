@@ -2,18 +2,22 @@
 
 namespace App\Models\User;
 
+use App\Enums\UserType;
+use BezhanSalleh\FilamentShield\Support\Utils;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as AuthenticateAble;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property int $id
  * @property string $first_name
  * @property string $last_name
  * @property string $username
+ * @property string $name
  * @property string $password
  * @property string $avatar
  * @property boolean $is_block
@@ -22,6 +26,7 @@ use Illuminate\Support\Carbon;
  */
 class Admin extends AuthenticateAble implements FilamentUser
 {
+    use HasRoles;
     /** @use HasFactory<\Database\Factories\User\AdminFactory> */
     use  HasFactory,Notifiable;
 
@@ -44,8 +49,20 @@ class Admin extends AuthenticateAble implements FilamentUser
         'password' => 'hashed',
     ];
 
+    protected $appends = [
+        'name'
+    ];
+
+    public function getNameAttribute(): string
+    {
+        return $this->first_name ? $this->first_name . ' ' . $this->last_name : $this->username;
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
-        return  ! $this->is_block;
+        try {
+            return ($this->hasRole(Utils::getSuperAdminName()) || $this->roles()->count() > 0) and ! $this->is_block;
+        } catch (\Exception $e) {}
+        return false;
     }
 }
