@@ -76,5 +76,11 @@ return [
         'replicate' => 'تکثیر',
         'reorder' => 'مرتب‌سازی',
         'restore_any' => 'بازیابی همه',
+        'update_roles' => 'سطوح دسترسی',
+        'update_positions' => 'موقعیت سازمانی',
+        'login' => 'لاگین به پنل کاربر',
+        'export_excel' => 'خروجی اکسل',
+        'import_excel' => 'ورودی اکسل',
+        'update_prices' => 'ویرایش صورتحساب',
     ],
 ];
