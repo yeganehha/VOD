@@ -40,7 +40,7 @@ class AdminResource extends Resource implements HasShieldPermissions
                     ->label('نام خانوادگی'),
                 Forms\Components\TextInput::make('username')
                     ->required()
-                    ->unique('users' ,'username',ignoreRecord: true)
+                    ->unique('admins' ,'username',ignoreRecord: true)
                     ->readOnlyOn('edit')
                     ->ltr()
                     ->label('نام کاربری'),
