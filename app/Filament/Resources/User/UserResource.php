@@ -25,7 +25,7 @@ class UserResource extends Resource
 
     protected static ?string $label = 'بیننده';
     protected static ?string $pluralLabel = 'بینندگان';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'letsicon-view-horizont';
 
     public static function form(Form $form): Form
     {

@@ -24,7 +24,7 @@ class AdminResource extends Resource implements HasShieldPermissions
     protected static ?string $label = 'مدیر و پشتیبان';
     protected static ?string $pluralLabel = 'مدیران و پشتیبانان';
 
-//    protected static ?string $navigationIcon = 'eos-admin-o';
+    protected static ?string $navigationIcon = 'eos-admin-o';
 
     public static function form(Form $form): Form
     {

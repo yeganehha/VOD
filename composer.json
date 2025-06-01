@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "bezhansalleh/filament-shield": "^3.3",
+        "codeat3/blade-eos-icons": "^1.15",
         "codeat3/blade-unicons": "^1.9",
         "davidhsianturi/blade-bootstrap-icons": "^2.0",
         "filament/filament": "^3.3",
@@ -17,6 +18,7 @@
         "hisorange/browser-detect": "^5.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "mansoor/blade-lets-icons": "^1.0",
         "mokhosh/filament-jalali": "^4.10",
         "noxoua/filament-activity-log": "^2.2",
         "sadegh19b/laravel-persian-validation": "^2.0"
