@@ -21,6 +21,7 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "mansoor/blade-lets-icons": "^1.0",
+        "mohamedsabil83/filament-forms-tinyeditor": "^2.4",
         "mokhosh/filament-jalali": "^4.10",
         "noxoua/filament-activity-log": "^2.2",
         "sadegh19b/laravel-persian-validation": "^2.0"

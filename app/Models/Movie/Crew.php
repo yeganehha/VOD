@@ -18,11 +18,11 @@ use Illuminate\Support\Carbon;
  * @property Carbon $birthday
  * @property Carbon $death_at
  * @property int $birth_location_id
- * @property Country $birth_location
+ * @property Country $birthLocation
  * @property Gender $gender
  * @property string $avatar
  * @property int $main_position_id
- * @property CrewPosition $main_position
+ * @property CrewPosition $mainPosition
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -51,11 +51,11 @@ class Crew extends Model
         'birthday' => 'date',
     ];
 
-    public function birth_location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function birthLocation(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
-    public function main_position(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function mainPosition(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(CrewPosition::class);
     }

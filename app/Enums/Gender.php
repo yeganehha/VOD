@@ -20,6 +20,14 @@ enum Gender: string implements HasLabel,HasIcon
         };
     }
 
+    public function getSlug(): ?string
+    {
+        return match ($this) {
+            self::Male => 'mr',
+            self::Female => 'ms',
+        };
+    }
+
     public function getIcon(): ?string
     {
         return match ($this) {

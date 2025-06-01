@@ -77,6 +77,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop('entities','entity_country','entity_covers','entity_genres','movies');
+        Schema::drop('entity_country','entity_covers','entity_genres','movies','entities');
     }
 };
