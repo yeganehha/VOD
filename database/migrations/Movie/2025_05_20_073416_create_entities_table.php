@@ -15,11 +15,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('title');
             $table->string('title_en');
+            $table->string('slug');
             $table->string('second_title')->nullable();
             $table->string('second_title_en')->nullable();
             $table->string('pre_title')->nullable();
             $table->string('pre_title_en')->nullable();
             $table->string('type')->nullable();
+            $table->string('publish_status');
             $table->string('weekly_release_schedule_day')->nullable();
             $table->time('weekly_release_schedule_hour')->nullable();
             $table->longText('about_movie')->nullable();
@@ -77,6 +79,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop('entity_country','entity_covers','entity_genres','movies','entities');
+        Schema::dropIfExists('entity_country');
+        Schema::dropIfExists('entity_covers');
+        Schema::dropIfExists('entity_genres');
+        Schema::dropIfExists('movies');
+        Schema::dropIfExists('entities');
     }
 };
