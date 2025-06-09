@@ -10,6 +10,16 @@ class ViewEntity extends ViewRecord
 {
     protected static string $resource = EntityResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabIcon(): ?string
+    {
+        return 'heroicon-m-cog';
+    }
+
     protected function getHeaderActions(): array
     {
         return [

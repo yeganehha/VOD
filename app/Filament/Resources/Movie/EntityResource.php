@@ -18,12 +18,24 @@ use Filament\Forms\Set;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\BooleanColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\MultiSelectFilter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Guava\FilamentClusters\Forms\Cluster;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\Grid;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Group;
+use Filament\Infolists\Components\BooleanEntry;
+use Filament\Infolists\Components\IconEntry;
 
 class EntityResource extends Resource
 {
@@ -138,7 +150,84 @@ class EntityResource extends Resource
     {
         return $infolist
             ->schema([
-                //
+                Grid::make(2)->schema([
+                    TextEntry::make('title')->label('عنوان'),
+                    TextEntry::make('title_en')->label('عنوان (انگلیسی)'),
+                    TextEntry::make('second_title')->label('عنوان دوم'),
+                    TextEntry::make('second_title_en')->label('عنوان دوم (انگلیسی)'),
+                    TextEntry::make('pre_title')->label('پیشوند عنوان'),
+                    TextEntry::make('pre_title_en')->label('پیشوند عنوان (انگلیسی)'),
+                    TextEntry::make('slug')->label('نامک'),
+                    TextEntry::make('type')
+                        ->label('نوع محتوا')
+                        ->formatStateUsing(fn ($state) => match($state) {
+                            'Movie' => 'فیلم',
+                            'Series' => 'سریال',
+                            'MultiSeasonSeries' => 'چندفصلی',
+                            default => $state,
+                        }),
+                    TextEntry::make('publish_status')
+                        ->label('وضعیت انتشار')
+                        ->formatStateUsing(fn ($state) => match($state) {
+                            'Published' => 'منتشر شده',
+                            'Draft' => 'پیش‌نویس',
+                            'Pending' => 'در انتظار',
+                            default => $state,
+                        }),
+                    TextEntry::make('weekly_release_schedule_day')
+                        ->label('روز پخش هفتگی')
+                        ->formatStateUsing(fn ($state) => match($state) {
+                            'Saturday' => 'شنبه',
+                            'Sunday' => 'یک‌شنبه',
+                            'Monday' => 'دوشنبه',
+                            'Tuesday' => 'سه‌شنبه',
+                            'Wednesday' => 'چهارشنبه',
+                            'Thursday' => 'پنج‌شنبه',
+                            'Friday' => 'جمعه',
+                            default => $state,
+                        }),
+                    TextEntry::make('weekly_release_schedule_hour')
+                        ->label('ساعت پخش')
+                        ->dateTime('H:i'),
+                    TextEntry::make('pro_year')->label('سال تولید'),
+                    TextEntry::make('main_audio')
+                        ->label('زبان')
+                        ->formatStateUsing(fn($state) => $state?->getLabel() ?? '-'),
+                    TextEntry::make('ageRange.title')->label('رده سنی'),
+                    IconEntry::make('exclusive')
+                        ->label('اختصاصی')
+                        ->boolean(),
+
+                    IconEntry::make('is_free_movie')
+                        ->label('رایگان')
+                        ->boolean(),
+                ]),
+
+                Group::make()->schema([
+                    TextEntry::make('about_movie')->label('درباره فیلم')->markdown(),
+                    TextEntry::make('about_movie_en')->label('درباره فیلم (انگلیسی)')->markdown(),
+                ])->columns(2),
+
+                Grid::make(2)->schema([
+                    ImageEntry::make('logo')->label('لوگوی مجموعه'),
+                    ImageEntry::make('movie_logo')->label('لوگوی فیلم'),
+                ]),
+
+                Grid::make(2)->schema([
+                    TextEntry::make('genres')
+                        ->label('ژانرها')
+                        ->formatStateUsing(fn(Entity $entity) => $entity->genres?->pluck('title')->join(', ') ?? '-'),
+
+                    TextEntry::make('countries')
+                        ->label('کشورها')
+                        ->formatStateUsing(fn(Entity $entity) => $entity->countries?->pluck('name')->join(', ') ?? '-'),
+                ]),
+
+
+                Grid::make(2)->schema([
+                    TextEntry::make('created_at')->label('تاریخ ایجاد')->date('Y/m/d - H:i'),
+                    TextEntry::make('updated_at')->label('آخرین ویرایش')->date('Y/m/d - H:i'),
+                ]),
             ]);
     }
 
@@ -147,10 +236,66 @@ class EntityResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('title')
+                    ->label('عنوان')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('title_en')
+                    ->label('عنوان (انگلیسی)')
+                    ->searchable()
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
+
+                TextColumn::make('type')
+                    ->label('نوع محتوا')
+                    ->sortable(),
+
+                TextColumn::make('genres.title')
+                    ->label('ژانرها')
+                    ->badge()
+                    ->separator(', '),
+
+                TextColumn::make('publish_status')
+                    ->label('وضعیت انتشار')
+                    ->sortable(),
+
+
+                TextColumn::make('created_at')
+                    ->label('تاریخ ثبت')
+                    ->jalaliDateTime('d F Y,  H:i:s')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                SelectFilter::make('type')
+                    ->label('نوع محتوا')
+                    ->options([
+                        EntityType::Movie->value => 'فیلم',
+                        EntityType::Series->value => 'سریال',
+                        EntityType::MultiSeasonSeries->value => 'چندفصلی',
+                    ]),
+
+                SelectFilter::make('publish_status')
+                    ->label('وضعیت انتشار')
+                    ->options(PublishStatus::class),
+
+                TernaryFilter::make('exclusive')
+                    ->label('اختصاصی'),
+
+                TernaryFilter::make('is_free_movie')
+                    ->label('رایگان'),
+
+                MultiSelectFilter::make('genres')
+                    ->label('ژانرها')
+                    ->relationship('genres', 'title'),
+
+                MultiSelectFilter::make('countries')
+                    ->label('کشورها')
+                    ->relationship('countries', 'name'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -168,7 +313,8 @@ class EntityResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\MoviesRelationManager::class,
+            RelationManagers\CoversRelationManager::class,
         ];
     }
 

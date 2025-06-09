@@ -3,10 +3,15 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Asset\AgeRange;
+use App\Models\Asset\Country;
 use App\Models\Movie\Crew;
+use App\Models\Movie\Entity;
+use App\Models\Movie\Genre;
 use App\Models\User\Admin;
 use App\Models\User\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -47,6 +52,26 @@ class DatabaseSeeder extends Seeder
         if ( Crew::query()->count() < 100) {
             Crew::factory(70)->create();
             Crew::factory(30)->dead()->create();
+        }
+
+
+        if ( Entity::query()->count() < 100) {
+            $ageRanges = AgeRange::query()->pluck('id');
+            $countries = Country::query()->pluck('id');
+            $genres = Genre::query()->pluck('id');
+            Entity::factory()
+                ->count(100)
+                ->create()
+                ->each(function ($entity) use ($ageRanges, $countries, $genres) {
+                    if ($ageRanges->isNotEmpty()) {
+                        $entity->update([
+                            'age_range_id' => $ageRanges->random(),
+                        ]);
+                    }
+                    $entity->countries()->attach($countries->random(rand(1, 3)));
+                    $entity->genres()->attach($genres->random(rand(1, 3)));
+                });
+            $this->call(MovieSeeder::class);
         }
 
     }

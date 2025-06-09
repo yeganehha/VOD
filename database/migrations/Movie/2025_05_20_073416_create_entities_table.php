@@ -42,6 +42,7 @@ return new class extends Migration
             $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
         });
         Schema::create('entity_covers', function (Blueprint $table) {
+            $table->uuid('id')->unique();
             $table->uuid('entity_id')->index();
             $table->foreign('entity_id')->references('id')->on('entities')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('ratio_type')->nullable();
@@ -69,6 +70,8 @@ return new class extends Migration
             $table->float('imdb_rate')->default(0);
             $table->date('publish_date')->nullable();
             $table->integer('pro_year')->nullable();
+            $table->unsignedTinyInteger('season')->default(1);
+            $table->unsignedTinyInteger('episode')->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
