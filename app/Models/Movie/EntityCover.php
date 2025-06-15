@@ -30,6 +30,12 @@ class EntityCover extends Model
 
 
 
+    public function getPathLinkAttribute()
+    {
+        return asset('storage/' . str_replace('\\','/' , $this->attributes['path']));
+    }
+
+
     protected static function boot()
     {
         parent::boot();

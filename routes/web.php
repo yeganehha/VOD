@@ -30,3 +30,13 @@ Route::get('/private-storage/temp/', function (){
 //    );
 //    return Storage::response('public/svg/cache/'.$icon.'.svg');
 //})->middleware('signed')->name('linkPrivateStorageSigned');
+
+
+
+
+
+
+Route::view('/' , 'layouts.homepage')->name('home');
+Route::view('/genre/{genre}' , 'layouts.homepage')->name('genre');
+Route::view('/login' , 'layouts.homepage')->name('login');
+Route::view('/profile' , 'layouts.homepage')->name('profile');
