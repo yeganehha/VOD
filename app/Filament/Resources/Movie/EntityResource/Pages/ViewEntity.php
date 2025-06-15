@@ -23,7 +23,7 @@ class ViewEntity extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            Actions\EditAction::make()->label('ویرایش اطلاعات کلی'),
         ];
     }
 }

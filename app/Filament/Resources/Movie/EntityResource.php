@@ -83,14 +83,17 @@ class EntityResource extends Resource
                     ->options(PublishStatus::class),
                 Forms\Components\Select::make('age_range_id')
                     ->label('رده سنی')
+                    ->native(false)
                     ->relationship('ageRange' ,'title'),
                 Forms\Components\Select::make('main_audio')
                     ->label('زبان محاوره')
                     ->searchable()
+                    ->native(false)
                     ->options(Audio::class),
                 Cluster::make([
                     Forms\Components\Select::make('weekly_release_schedule_day')
                         ->prefix('در روز')
+                        ->native(false)
                         ->options(WeekDay::class),
                     Forms\Components\TimePicker::make('weekly_release_schedule_hour')
                         ->native(true)

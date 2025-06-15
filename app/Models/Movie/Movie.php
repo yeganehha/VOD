@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
 /**
  * @property string $id
  * @property string $entity_id
+ * @property string $title
+ * @property string $title_en
  * @property Entity $entity
  * @property bool $is_high_definition
  * @property int|null $age_range_id
@@ -44,11 +46,12 @@ class Movie extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'id', 'entity_id', 'is_high_definition', 'age_range_id', 'main_audio',
+        'id', 'title' , 'title_en' ,'entity_id', 'is_high_definition', 'age_range_id', 'main_audio',
         'description', 'description_en', 'dubbed', 'duration', 'exclusive',
         'is_multi_audio', 'has_subtitle', 'imdb_rate', 'publish_date', 'pro_year',
         'season' , 'episode'
     ];
+    // TODO: duration should be auto compile
 
     protected $casts = [
         'is_high_definition' => 'boolean',

@@ -46,6 +46,7 @@ return new class extends Migration
             $table->uuid('entity_id')->index();
             $table->foreign('entity_id')->references('id')->on('entities')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('ratio_type')->nullable();
+            $table->string('path');
             $table->enum('cover_type' , \App\Enums\CoverType::values())->default(\App\Enums\CoverType::Image->value);
         });
         Schema::create('entity_genres', function (Blueprint $table) {
@@ -57,6 +58,8 @@ return new class extends Migration
             $table->uuid('id')->unique();
             $table->uuid('entity_id')->index();
             $table->foreign('entity_id')->references('id')->on('entities')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('title')->nullable();
+            $table->string('title_en')->nullable();
             $table->boolean('is_high_definition')->default(false);
             $table->foreignId('age_range_id')->nullable()->constrained('age_ranges')->nullOnDelete();
             $table->string('main_audio')->nullable();

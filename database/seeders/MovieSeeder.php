@@ -2,10 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Enums\CoverType;
 use App\Enums\EntityType;
+use App\Enums\RatioType;
 use App\Models\Movie\Entity;
+use App\Models\Movie\EntityCover;
 use App\Models\Movie\Movie;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MovieSeeder extends Seeder
 {
@@ -13,13 +18,45 @@ class MovieSeeder extends Seeder
     {
         $entities = Entity::all();
 
+        $i = 0;
+        $saveJson = [];
+        if ( file_exists(storage_path('app/public/entity-covers/image-cache.json'))) {
+            $saveJson = json_decode(file_get_contents(storage_path('app/public/entity-covers/image-cache.json')) , true);
+        }
+
         foreach ($entities as $entity) {
+            $i++;
+            foreach ( RatioType::cases() as $case ){
+                if ( ! (isset($saveJson[$i]) and isset($saveJson[$i][$case->value])) ) {
+                    list($w, $h) = explode(':', $case->value);
+                    Storage::makeDirectory('public/entity-covers/');
+                    Storage::makeDirectory('public/entity-covers/' . now()->format('Y'));
+                    Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m'));
+                    Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m/d'));
+                    $image = fake()->image(
+                        storage_path('app/public/entity-covers/' . now()->format('Y/m/d')),
+                        $w * 100,
+                        $h * 100,
+                        word: $i . '-' . $case->value
+                    );
+                    $saveJson[$i][$case->value] = str_replace(storage_path('app/public/'), '', $image);
+                    file_put_contents(storage_path('app/public/entity-covers/image-cache.json'), json_encode($saveJson));
+                }
+                EntityCover::query()->create([
+                    'entity_id' => $entity->id ,
+                    'ratio_type' => $case->value ,
+                    'cover_type' => CoverType::Image,
+                    'path' => $saveJson[$i][$case->value]
+                ]);
+            }
             if ($entity->type === EntityType::Movie) {
                 Movie::query()->create([
                     'entity_id' => $entity->id,
                     'is_high_definition' => (bool) rand(0, 1),
                     'age_range_id' => $entity->age_range_id,
                     'main_audio' => $entity->main_audio,
+                    'title' => $entity->title,
+                    'title_en' => $entity->title_en,
                     'description' => $entity->about_movie,
                     'description_en' => $entity->about_movie_en,
                     'dubbed' => (bool) rand(0, 1),
@@ -43,8 +80,10 @@ class MovieSeeder extends Seeder
                         'is_high_definition' => (bool) rand(0, 1),
                         'age_range_id' => $entity->age_range_id,
                         'main_audio' => $entity->main_audio,
-                        'description' => $entity->about_movie . " - Episode " . ($i + 1),
-                        'description_en' => $entity->about_movie_en . " - Episode " . ($i + 1),
+                        'title' => $entity->title. " - Episode " . ($i + 1),
+                        'title_en' => $entity->title_en. " - Episode " . ($i + 1),
+                        'description' => fake('fa')->paragraph ,
+                        'description_en' => fake('en')->paragraph ,
                         'dubbed' => (bool) rand(0, 1),
                         'duration' => rand(20, 60),
                         'exclusive' => $entity->exclusive,

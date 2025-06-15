@@ -14,7 +14,12 @@ class CoversRelationManager extends RelationManager
 {
     protected static string $relationship = 'covers';
     protected static ?string $recordTitleAttribute = 'cover_type';
-    protected static ?string $title = 'کاورها';
+    protected static ?string $title = 'کاور';
+    protected static ?string $modelLabel = 'کاور';
+    protected static ?string $pluralLabel = 'کاورها';
+
+    protected static ?string $icon = 'heroicon-o-photo';
+    protected static bool $isLazy = false;
 
 
     public function isReadOnly(): bool
@@ -51,17 +56,14 @@ class CoversRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('cover_type')
-                    ->label('نوع کاور')
-                    ->formatStateUsing(fn($state) => CoverType::tryFrom($state)?->getLabel()),
+                    ->label('نوع کاور'),
 
                 Tables\Columns\TextColumn::make('ratio_type')
-                    ->label('نسبت تصویر')
-                    ->formatStateUsing(fn($state) => RatioType::tryFrom($state)?->getLabel()),
+                    ->label('نسبت تصویر'),
 
                 Tables\Columns\ImageColumn::make('path')
                     ->label('تصویر')
-                    ->height(60)
-                    ->square(),
+                    ->height(60),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('cover_type')
@@ -76,6 +78,7 @@ class CoversRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make()->label('افزودن کاور'),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()->label('نمایش'),
                 Tables\Actions\EditAction::make()->label('ویرایش'),
                 Tables\Actions\DeleteAction::make()->label('حذف'),
             ])

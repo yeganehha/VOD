@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "bezhansalleh/filament-shield": "^3.3",
+        "blade-ui-kit/blade-zondicons": "^1.6",
         "codeat3/blade-carbon-icons": "*",
         "codeat3/blade-eos-icons": "^1.15",
         "codeat3/blade-google-material-design-icons": "^1.20",

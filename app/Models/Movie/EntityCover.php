@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 
 /**
  * @property string $entity_id
+ * @property string $path
  * @property Entity $entity
  * @property RatioType $ratio_type
  * @property CoverType $cover_type
@@ -20,7 +21,7 @@ class EntityCover extends Model
     public $timestamps = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['id' , 'entity_id', 'ratio_type', 'cover_type'];
+    protected $fillable = ['id' , 'entity_id', 'ratio_type', 'cover_type' , 'path'];
 
     protected $casts = [
         'ratio_type' => \App\Enums\RatioType::class,
