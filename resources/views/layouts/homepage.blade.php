@@ -38,8 +38,8 @@
                                     {{ $item->description ?? $item->entity->description }}
                                 </p>
                                 <div class="hero-btn" data-animation="fadeInUp" data-delay="1.25s">
-                                    <a href="#" class="theme-btn gap-1"><span class="icon-play-3"></span>مشاهده</a>
-                                    <a href="#" class="theme-btn theme-btn2">اطلاعات بیشتر</a>
+                                    <a href="{{ route('movie.short' , $item->id ) }}" class="theme-btn gap-1"><span class="icon-play-3"></span>مشاهده</a>
+                                    <a href="{{ route('movie.short' , $item->id ) }}" class="theme-btn theme-btn2">اطلاعات بیشتر</a>
                                 </div>
                             </div>
                         </div>
@@ -75,10 +75,10 @@
 {{--                    <span class="movie-quality">اچ دی</span>--}}
                     <div class="movie-img">
                         <img data-ratio="3/4" style="aspect-ratio: 3 / 4;" data-entityId="{{ $item->entity_id }}" src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image-300x225.png" alt="{{ $item->title ?? $item->entity->title }}">
-                        <a href="movie-single.html" class="movie-play"><i class="icon-play-3"></i></a>
+                        <a href="{{ route('movie.short' , $item->id ) }}" class="movie-play"><i class="icon-play-3"></i></a>
                     </div>
                     <div class="movie-content">
-                        <h6 class="movie-title"><a href="movie-single.html">{{ $item->title ?? $item->entity->title }}</a></h6>
+                        <h6 class="movie-title"><a href="{{ route('movie.short' , $item->id ) }}">{{ $item->title ?? $item->entity->title }}</a></h6>
                         <div class="movie-info">
                             <span class="movie-time">{{ $item->duration }} دقیقه</span>
                             <div class="movie-genre">
@@ -129,10 +129,10 @@
                     <span class="movie-quality">قسمت {{ $item->episode }} @if($item->entity->type == \App\Enums\EntityType::MultiSeasonSeries) فصل {{ $item->season }}@endif </span>
                     <div class="movie-img">
                         <img data-ratio="3/4" style="aspect-ratio: 3 / 4;" data-entityId="{{ $item->entity_id }}" src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image-300x225.png" alt="{{ $item->title ?? $item->entity->title }}">
-                        <a href="movie-single.html" class="movie-play"><i class="icon-play-3"></i></a>
+                        <a href="{{ route('movie.short' , $item->id ) }}" class="movie-play"><i class="icon-play-3"></i></a>
                     </div>
                     <div class="movie-content">
-                        <h6 class="movie-title"><a href="movie-single.html">{{ $item->title ?? $item->entity->title }}</a></h6>
+                        <h6 class="movie-title"><a href="{{ route('movie.short' , $item->id ) }}">{{ $item->title ?? $item->entity->title }}</a></h6>
                         <div class="movie-info">
                             <span class="movie-time">{{ $item->duration }} دقیقه</span>
                             <div class="movie-genre">

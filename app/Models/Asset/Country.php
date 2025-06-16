@@ -2,8 +2,12 @@
 
 namespace App\Models\Asset;
 
+use App\Models\Movie\Entity;
 use App\Services\Helper;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -15,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $medium_flag
  * @property string $normal_flag
  * @property string $large_flag
+ * @property Collection<Entity> $entities
  */
 class Country extends Model
 {
@@ -55,5 +60,10 @@ class Country extends Model
     {
         /** TODO: Add Logo of none image */
         return $this?->flag ? asset('storage/countries/large/'.$this->flag) : (Helper::setting('logo') ? asset('storage/'.Helper::setting('logo')): asset('assets/images/residence.png'));
+    }
+
+    public function entities(): BelongsToMany
+    {
+        return $this->belongsToMany(Entity::class , 'entity_country');
     }
 }

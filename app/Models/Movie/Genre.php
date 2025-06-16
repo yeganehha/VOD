@@ -3,6 +3,8 @@
 namespace App\Models\Movie;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 
 /**
@@ -12,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $for_kids
  * @property boolean $hide_from_kids
  * @property integer $sort
+ * @property Collection<Entity> $entities
  */
 class Genre extends Model
 {
@@ -29,4 +32,9 @@ class Genre extends Model
         'hide_from_kids' => 'boolean',
         'sort' => 'int',
     ];
+
+    public function entities(): BelongsToMany
+    {
+        return $this->belongsToMany(Entity::class , 'entity_genres');
+    }
 }

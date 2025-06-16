@@ -12,27 +12,6 @@
                             ما انواع مختلفی از معابر موجود داریم که اکثریت آنها دچار تغییر شده اند
                             به نوعی با تزریق کلمات طنز باورپذیر.
                         </p>
-                        <div class="footer-language">
-                            <div class="dropdown">
-                                <a href="#" class="language dropdown-toggle" data-bs-toggle="dropdown"
-                                   aria-expanded="false">
-                                    <img src="images/united-states.png" alt="">
-                                    <span>انگلیسی</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#"><img src="images/united-states.png"
-                                                                               alt="">انگلیسی</a></li>
-                                    <li><a class="dropdown-item" href="#"><img src="images/germany.png"
-                                                                               alt="">ترکی</a></li>
-                                    <li><a class="dropdown-item" href="#"><img src="images/france.png"
-                                                                               alt="">عربی</a></li>
-                                    <li><a class="dropdown-item" href="#"><img src="images/china.png"
-                                                                               alt="">ژاپنی</a></li>
-                                    <li><a class="dropdown-item" href="#"><img src="images/spain.png"
-                                                                               alt="">چینی</a></li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-2">
@@ -52,12 +31,9 @@
                     <div class="footer-widget-box list">
                         <h4 class="footer-widget-title">ژانر</h4>
                         <ul class="footer-list">
-                            <li><a href="#">اکشن</a></li>
-                            <li><a href="#">بیوگرافی</a></li>
-                            <li><a href="#">مستند</a></li>
-                            <li><a href="#">ماجراجویی</a></li>
-                            <li><a href="#">ریلی تایم</a></li>
-                            <li><a href="#">روانی</a></li>
+                            @foreach(\App\Repositories\Movie\GenreRepository::init()->mostMovies(6) as $genre)
+                                <li><a href="{{ route('genre' , ['genre' => $genre->slug]) }}">{{ $genre->title }}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>

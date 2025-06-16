@@ -78,7 +78,7 @@ class Movie extends Model
         static::creating(function (Model $model) {
             /** @var self $model */
             do {
-                $model->id = Str::uuid();
+                $model->id = Str::random(8);
             } while ( self::query()->where('id', $model->id)->exists() );
         });
     }
