@@ -37,6 +37,14 @@ Route::get('/private-storage/temp/', function (){
 
 
 Route::view('/' , 'layouts.homepage')->name('home');
+Route::get('/get-cover/{width}/{height}/{entity_id}' , function ($width,$height,$entity_id) {
+    return response()->redirectTo(
+        optional(
+            optional(\App\Models\Movie\EntityCover::query()->where('entity_id' , $entity_id)->get())
+                ->sortBy(fn($img) => abs($img->ratio_type->division() - ((float)$width / (float) $height)))
+                ->filter(fn($img) => $img->path and file_exists(storage_path('app/public/' . $img->path)))
+        )->first()?->path_link) ;
+})->name('get-cover');
 Route::view('/genre/{genre}' , 'layouts.homepage')->name('genre');
 Route::view('/login' , 'layouts.homepage')->name('login');
 Route::view('/profile' , 'layouts.homepage')->name('profile');

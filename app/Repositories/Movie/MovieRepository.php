@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Movie;
 
+use App\Enums\EntityType;
 use App\Enums\PublishStatus;
 use App\Models\Movie\Movie;
 use BadMethodCallException;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @method Builder query();
  * @method Collection<Movie> lastItemslastItems($item = 1);
  * @method MovieRepository futureRelease();
+ * @method MovieRepository series();
  */
 class MovieRepository
 {
@@ -97,5 +99,10 @@ class MovieRepository
     {
 //        $this->query
 //            ->where('publish_date' , '>=', now()->subDays(2));
+    }
+    private function _series(): void
+    {
+        $this->query
+            ->whereHas('entity' , fn(Builder $builder) => $builder->whereIn('type' , collect(EntityType::cases())->filter(fn($item) => $item->isMultiEpisode())->toArray()));
     }
 }

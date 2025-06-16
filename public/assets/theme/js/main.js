@@ -2,7 +2,42 @@
     "use strict";
     $(window).on('load', function () {
         $(".preloader").fadeOut("slow");
+        const elements = document.querySelectorAll("div[data-entityId], img[data-entityId]");
+        function isInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top < window.innerHeight && rect.bottom > 0
+            );
+        }
+
+        function updateImages() {
+            elements.forEach(el => {
+                if (isInViewport(el)) {
+                    const entityId = el.getAttribute("data-entityId");
+                    const width = Math.floor(el.offsetWidth);
+                    const height = Math.floor(el.offsetHeight);
+                    var imageUrl = `/get-cover/${width}/${height}/${entityId}`;
+                    if (el.hasAttribute("data-ratio")) {
+                        const Ratio = el.getAttribute("data-ratio");
+                        imageUrl = `/get-cover/${Ratio}/${entityId}`;
+                    }
+
+                    if (el.tagName.toLowerCase() === "div") {
+                        if ( el.style.backgroundImage.includes(imageUrl) !== true)
+                            el.style.backgroundImage = `url(${imageUrl})`;
+                    } else if (el.tagName.toLowerCase() === "img") {
+                        if ( el.src.includes(imageUrl) !== true)
+                            el.src = imageUrl;
+                    }
+                }
+            });
+        }
+
+        window.addEventListener("scroll", updateImages);
+        // اجرا در ابتدا برای حالت وقتی صفحه لود می‌شود و اسکرول نشده
+        updateImages();
     });
+
     $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
         if (!$(this).next().hasClass('show')) {
             $(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
@@ -85,6 +120,7 @@
     });
     $('.movie-slider').owlCarousel({
         loop: true,
+        rtl: true,
         margin: 20,
         nav: true,
         dots: false,
