@@ -2,7 +2,8 @@
     "use strict";
     $(window).on('load', function () {
         $(".preloader").fadeOut("slow");
-        const elements = document.querySelectorAll("div[data-entityId], img[data-entityId]");
+        const entities = document.querySelectorAll("div[data-entityId], img[data-entityId]");
+        const movies = document.querySelectorAll("div[data-movieId], img[data-movieId]");
         function isInViewport(el) {
             const rect = el.getBoundingClientRect();
             return (
@@ -10,25 +11,33 @@
             );
         }
 
-        function updateImages() {
-            elements.forEach(el => {
-                if (isInViewport(el)) {
-                    const entityId = el.getAttribute("data-entityId");
-                    const width = Math.floor(el.offsetWidth);
-                    const height = Math.floor(el.offsetHeight);
-                    var imageUrl = `/get-cover/${width}/${height}/${entityId}`;
-                    if (el.hasAttribute("data-ratio")) {
-                        const Ratio = el.getAttribute("data-ratio");
-                        imageUrl = `/get-cover/${Ratio}/${entityId}`;
-                    }
+        function placeImage(el, type) {
+            const entityId = el.getAttribute("data-entityId");
+            const width = Math.floor(el.offsetWidth);
+            const height = Math.floor(el.offsetHeight);
+            var imageUrl = `/${type}-cover/${width}/${height}/${entityId}`;
+            if (el.hasAttribute("data-ratio")) {
+                const Ratio = el.getAttribute("data-ratio");
+                imageUrl = `/${type}-cover/${Ratio}/${entityId}`;
+            }
+            if (el.tagName.toLowerCase() === "div") {
+                if ( el.style.backgroundImage.includes(imageUrl) !== true)
+                    el.style.backgroundImage = `url(${imageUrl})`;
+            } else if (el.tagName.toLowerCase() === "img") {
+                if ( el.src.includes(imageUrl) !== true)
+                    el.src = imageUrl;
+            }
+        }
 
-                    if (el.tagName.toLowerCase() === "div") {
-                        if ( el.style.backgroundImage.includes(imageUrl) !== true)
-                            el.style.backgroundImage = `url(${imageUrl})`;
-                    } else if (el.tagName.toLowerCase() === "img") {
-                        if ( el.src.includes(imageUrl) !== true)
-                            el.src = imageUrl;
-                    }
+        function updateImages() {
+            entities.forEach(el => {
+                if (isInViewport(el)) {
+                    placeImage(el,'entity');
+                }
+            });
+            movies.forEach(el => {
+                if (isInViewport(el)) {
+                    placeImage(el,'entity');
                 }
             });
         }

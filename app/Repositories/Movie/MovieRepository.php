@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @method Collection<Movie> lastItemslastItems($item = 1);
  * @method MovieRepository futureRelease();
  * @method MovieRepository series();
+ * @method MovieRepository singleShow($entitySlug , $episode, $season);
  */
 class MovieRepository
 {
@@ -28,6 +29,7 @@ class MovieRepository
 
     private function _futureRelease(): void
     {
+        // TODO: uncomment this files
 //        $this->query
 //            ->where('publish_date' , '>=', now()->subDays(2));
     }
@@ -35,5 +37,13 @@ class MovieRepository
     {
         $this->query
             ->whereHas('entity' , fn(Builder $builder) => $builder->whereIn('type' , collect(EntityType::cases())->filter(fn($item) => $item->isMultiEpisode())->toArray()));
+    }
+    private function _singleShow($entitySlug , $episode, $season): void
+    {
+        $this->query
+            ->with(['entity'  ,'covers' , 'entity.covers', 'entity.genres', 'entity.countries'])
+            ->wherehas('entity' , fn($builder) => $builder->where('slug' , $entitySlug))
+            ->where('episode' , $episode)
+            ->where('season' , $season);
     }
 }

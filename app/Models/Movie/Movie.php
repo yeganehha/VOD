@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 /**
@@ -31,6 +32,7 @@ use Illuminate\Support\Str;
  * @property Carbon|null $publish_date
  * @property int|null $pro_year
  * @property int $season
+ * @property Collection<MovieCover> $covers
  * @property int $episode
  * @property Carbon|null $deleted_at
  * @property Carbon $created_at
@@ -92,4 +94,11 @@ class Movie extends Model
     {
         return $this->belongsTo(AgeRange::class);
     }
+
+
+    public function covers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(MovieCover::class);
+    }
+
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MoviesController;
 use App\Models\Movie\Movie;
 use Filament\Actions\Exports\Http\Controllers\DownloadExport;
 use Filament\Actions\Imports\Http\Controllers\DownloadImportFailureCsv;
@@ -38,13 +39,18 @@ Route::get('/private-storage/temp/', function (){
 
 
 Route::view('/' , 'layouts.homepage')->name('home');
-Route::get('/get-cover/{width}/{height}/{entity_id}' , function ($width,$height,$entity_id) {
-    return response()->redirectTo(
-        optional(
+Route::get('/entity-cover/{width}/{height}/{entity_id}' , function ($width,$height,$entity_id) {
+    $path = cache()->remember('entity_cover_path_'.$width.'_'.$height.'_'.$entity_id, 60*60*24*30 , function () use ($entity_id,$width,$height){
+        return optional(
             optional(\App\Models\Movie\EntityCover::query()->where('entity_id' , $entity_id)->get())
                 ->sortBy(fn($img) => abs($img->ratio_type->division() - ((float)$width / (float) $height)))
                 ->filter(fn($img) => $img->path and file_exists(storage_path('app/public/' . $img->path)))
-        )->first()?->path_link) ;
+        )->first()?->path ;
+    });
+    if ( file_exists(storage_path('app/public/' . $path))) {
+        return response()->file(storage_path('app/public/' . $path));
+    }
+    abort(404);
 })->name('get-cover');
 Route::view('/genre/{genre}' , 'layouts.homepage')->name('genre');
 Route::view('/country/{code}/{title?}' , 'layouts.homepage')->name('country');
@@ -60,8 +66,8 @@ Route::get('/m/{uuid}' , function ($uuid) {
         return response()->redirectTo(route("movie.series" , [$movie->entity->slug, $movie->season, $movie->episode]));
     return response()->redirectTo(route("movie.episode" , [$movie->entity->slug,$movie->episode]));
 })->name('movie.short');
-Route::view('/movie/{slug}' , 'layouts.homepage')->name('movie.show');
-Route::view('/movie/{slug}/episode/{episode}' , 'layouts.homepage')->name('movie.episode');
-Route::view('/movie/{slug}/season/{season}/episode/{episode}' , 'layouts.homepage')->name('movie.series');
+Route::get('/movie/{slug}' , [MoviesController::class , 'singleShow'])->name('movie.show');
+Route::get('/movie/{slug}/episode/{episode}' , [MoviesController::class , 'singleShow'])->name('movie.episode');
+Route::get('/movie/{slug}/season/{season}/episode/{episode}' , [MoviesController::class , 'singleShow'])->name('movie.series');
 Route::view('/login' , 'layouts.homepage')->name('login');
 Route::view('/profile' , 'layouts.homepage')->name('profile');

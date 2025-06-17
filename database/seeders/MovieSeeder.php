@@ -8,6 +8,7 @@ use App\Enums\RatioType;
 use App\Models\Movie\Entity;
 use App\Models\Movie\EntityCover;
 use App\Models\Movie\Movie;
+use App\Models\Movie\MovieCover;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -24,6 +25,11 @@ class MovieSeeder extends Seeder
             $saveJson = json_decode(file_get_contents(storage_path('app/public/entity-covers/image-cache.json')) , true);
         }
 
+        $iMovie = 0;
+        $saveJsonMovie = [];
+        if ( file_exists(storage_path('app/public/movie-covers/image-cache.json'))) {
+            $saveJsonMovie = json_decode(file_get_contents(storage_path('app/public/movie-covers/image-cache.json')) , true);
+        }
         foreach ($entities as $entity) {
             $i++;
             foreach ( RatioType::cases() as $case ){
@@ -104,7 +110,7 @@ class MovieSeeder extends Seeder
                 for ($j = 0; $j < $SeasonCount; $j++) {
                     for ($i = 0; $i < $movieCount; $i++) {
                         $publishDate = now()->subDays(rand(10, 365));
-                        Movie::query()->create([
+                        $movie = Movie::query()->create([
                             'entity_id' => $entity->id,
                             'is_high_definition' => (bool) rand(0, 1),
                             'age_range_id' => $entity->age_range_id,
@@ -122,6 +128,31 @@ class MovieSeeder extends Seeder
                             'episode' => ($i + 1),
                             'season' => ($j + 1),
                         ]);
+
+                        $iMovie++;
+                        foreach ( [RatioType::R_21_9 , RatioType::R_16_9, RatioType::R_1_1, RatioType::R_9_16, RatioType::R_3_4, RatioType::R_3_5  ] as $case ){
+                            if ( ! (isset($saveJsonMovie[$iMovie]) and isset($saveJsonMovie[$iMovie][$case->value])) ) {
+                                list($w, $h) = explode(':', $case->value);
+                                Storage::makeDirectory('public/movie-covers/');
+                                Storage::makeDirectory('public/movie-covers/' . now()->format('Y'));
+                                Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m'));
+                                Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m/d'));
+                                $image = fake()->image(
+                                    storage_path('app/public/movie-covers/' . now()->format('Y/m/d')),
+                                    $w * 100,
+                                    $h * 100,
+                                    word: $iMovie . '-' . $case->value
+                                );
+                                $saveJsonMovie[$iMovie][$case->value] = str_replace(storage_path('app/public/'), '', $image);
+                                file_put_contents(storage_path('app/public/movie-covers/image-cache.json'), json_encode($saveJsonMovie));
+                            }
+                            MovieCover::query()->create([
+                                'movie_id' => $movie->id ,
+                                'ratio_type' => $case->value ,
+                                'cover_type' => CoverType::Image,
+                                'path' => $saveJsonMovie[$iMovie][$case->value]
+                            ]);
+                        }
                     }
                 }
             }

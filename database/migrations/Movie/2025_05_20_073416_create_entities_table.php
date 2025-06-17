@@ -78,6 +78,14 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        Schema::create('movie_covers', function (Blueprint $table) {
+            $table->uuid('id')->unique();
+            $table->uuid('movie_id')->index();
+            $table->foreign('movie_id')->references('id')->on('movies')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('ratio_type')->nullable();
+            $table->string('path');
+            $table->enum('cover_type' , \App\Enums\CoverType::values())->default(\App\Enums\CoverType::Image->value);
+        });
     }
 
     /**
@@ -85,6 +93,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('movie_covers');
         Schema::dropIfExists('entity_country');
         Schema::dropIfExists('entity_covers');
         Schema::dropIfExists('entity_genres');
