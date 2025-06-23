@@ -15,48 +15,64 @@ use Illuminate\Support\Str;
 
 class MovieSeeder extends Seeder
 {
+
+    private array $images = [] ;
+    private function makeMovieCovers($movieId): void
+    {
+        foreach ( [RatioType::R_21_9 , RatioType::R_16_9, RatioType::R_1_1, RatioType::R_9_16, RatioType::R_3_4, RatioType::R_3_5  ] as $case ){
+            $source = collect(optional($this->images)[$case->value] ?? [])->random();
+            $destination = 'movie-covers/'. now()->format('Y/m/d').'/'.  Str::uuid() .'.' . pathinfo($source, PATHINFO_EXTENSION) ;
+            copy($source , storage_path('app/public/'. $destination)) ;
+            MovieCover::query()->create([
+                'movie_id' => $movieId ,
+                'ratio_type' => $case->value ,
+                'cover_type' => CoverType::Image,
+                'path' => $destination
+            ]);
+        }
+    }
     public function run(): void
     {
         $entities = Entity::all();
-
-        $i = 0;
-        $saveJson = [];
-        if ( file_exists(storage_path('app/public/entity-covers/image-cache.json'))) {
-            $saveJson = json_decode(file_get_contents(storage_path('app/public/entity-covers/image-cache.json')) , true);
-        }
-
-        $iMovie = 0;
-        $saveJsonMovie = [];
-        if ( file_exists(storage_path('app/public/movie-covers/image-cache.json'))) {
-            $saveJsonMovie = json_decode(file_get_contents(storage_path('app/public/movie-covers/image-cache.json')) , true);
-        }
-        foreach ($entities as $entity) {
-            $i++;
-            foreach ( RatioType::cases() as $case ){
-                if ( ! (isset($saveJson[$i]) and isset($saveJson[$i][$case->value])) ) {
-                    list($w, $h) = explode(':', $case->value);
-                    Storage::makeDirectory('public/entity-covers/');
-                    Storage::makeDirectory('public/entity-covers/' . now()->format('Y'));
-                    Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m'));
-                    Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m/d'));
-                    $image = fake()->image(
-                        storage_path('app/public/entity-covers/' . now()->format('Y/m/d')),
-                        $w * 100,
-                        $h * 100,
-                        word: $i . '-' . $case->value
-                    );
-                    $saveJson[$i][$case->value] = str_replace(storage_path('app/public/'), '', $image);
-                    file_put_contents(storage_path('app/public/entity-covers/image-cache.json'), json_encode($saveJson));
+        foreach ( RatioType::cases() as $case ){
+            $selectedRatio = PHP_INT_MAX ;
+            $selectedRatioImage = null;
+            foreach ( glob(public_path('assets/theme/images/*.*')) as $filename ) {
+                list($width, $height, $type, $attr) = getimagesize($filename);
+                if( $height == 0 )
+                    continue;
+                $imgRatio = ((float)$width / (float)$height);
+                if ( abs($case->division() - $imgRatio) <= $selectedRatio){
+                    $selectedRatio = abs($case->division() - $imgRatio);
+                    $selectedRatioImage = $filename;
                 }
+            }
+            $this->images[$case->value][] = $selectedRatioImage;
+        }
+        Storage::makeDirectory('public/entity-covers/');
+        Storage::makeDirectory('public/entity-covers/' . now()->format('Y'));
+        Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m'));
+        Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m/d'));
+        Storage::makeDirectory('public/movie-covers/');
+        Storage::makeDirectory('public/movie-covers/' . now()->format('Y'));
+        Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m'));
+        Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m/d'));
+        foreach ($entities as $entity) {
+            foreach ( RatioType::cases() as $case ){
+                if ( count(optional($this->images)[$case->value] ?? [] ) == 0  )
+                    dd($case->value);
+                $source = collect(optional($this->images)[$case->value] ?? [])->random();
+                $destination = 'entity-covers/'. now()->format('Y/m/d').'/'.  Str::uuid() .'.' . pathinfo($source, PATHINFO_EXTENSION) ;
+                copy($source , storage_path('app/public/'. $destination)) ;
                 EntityCover::query()->create([
                     'entity_id' => $entity->id ,
                     'ratio_type' => $case->value ,
                     'cover_type' => CoverType::Image,
-                    'path' => $saveJson[$i][$case->value]
+                    'path' => $destination
                 ]);
             }
             if ($entity->type === EntityType::Movie) {
-                Movie::query()->create([
+                $movie = Movie::query()->create([
                     'entity_id' => $entity->id,
                     'is_high_definition' => (bool) rand(0, 1),
                     'age_range_id' => $entity->age_range_id,
@@ -76,12 +92,13 @@ class MovieSeeder extends Seeder
                     'season' => 1,
                     'episode' => 1,
                 ]);
+                $this->makeMovieCovers($movie->id);
             }
 
             if ($entity->type == EntityType::Series ) {
                 $movieCount = rand(3, 7);
                 for ($i = 0; $i < $movieCount; $i++) {
-                    Movie::query()->create([
+                    $movie = Movie::query()->create([
                         'entity_id' => $entity->id,
                         'is_high_definition' => (bool) rand(0, 1),
                         'age_range_id' => $entity->age_range_id,
@@ -101,6 +118,7 @@ class MovieSeeder extends Seeder
                         'episode' => ($i + 1),
                         'season' => 1,
                     ]);
+                    $this->makeMovieCovers($movie->id);
                 }
             }
 
@@ -128,31 +146,7 @@ class MovieSeeder extends Seeder
                             'episode' => ($i + 1),
                             'season' => ($j + 1),
                         ]);
-
-                        $iMovie++;
-                        foreach ( [RatioType::R_21_9 , RatioType::R_16_9, RatioType::R_1_1, RatioType::R_9_16, RatioType::R_3_4, RatioType::R_3_5  ] as $case ){
-                            if ( ! (isset($saveJsonMovie[$iMovie]) and isset($saveJsonMovie[$iMovie][$case->value])) ) {
-                                list($w, $h) = explode(':', $case->value);
-                                Storage::makeDirectory('public/movie-covers/');
-                                Storage::makeDirectory('public/movie-covers/' . now()->format('Y'));
-                                Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m'));
-                                Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m/d'));
-                                $image = fake()->image(
-                                    storage_path('app/public/movie-covers/' . now()->format('Y/m/d')),
-                                    $w * 100,
-                                    $h * 100,
-                                    word: $iMovie . '-' . $case->value
-                                );
-                                $saveJsonMovie[$iMovie][$case->value] = str_replace(storage_path('app/public/'), '', $image);
-                                file_put_contents(storage_path('app/public/movie-covers/image-cache.json'), json_encode($saveJsonMovie));
-                            }
-                            MovieCover::query()->create([
-                                'movie_id' => $movie->id ,
-                                'ratio_type' => $case->value ,
-                                'cover_type' => CoverType::Image,
-                                'path' => $saveJsonMovie[$iMovie][$case->value]
-                            ]);
-                        }
+                        $this->makeMovieCovers($movie->id);
                     }
                 }
             }

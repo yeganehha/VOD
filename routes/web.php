@@ -39,10 +39,15 @@ Route::get('/private-storage/temp/', function (){
 
 
 Route::view('/' , 'layouts.homepage')->name('home');
-Route::get('/entity-cover/{width}/{height}/{entity_id}' , function ($width,$height,$entity_id) {
-    $path = cache()->remember('entity_cover_path_'.$width.'_'.$height.'_'.$entity_id, 60*60*24*30 , function () use ($entity_id,$width,$height){
+Route::get('/{type}-cover/{width}/{height}/{entity_id}' , function ($type,$width,$height,$entity_id) {
+    $path = cache()->remember($type.'_cover_path_'.$width.'_'.$height.'_'.$entity_id, app()->isProduction() ? 60*60*24*30 : 0 , function () use ($type,$entity_id,$width,$height){
         return optional(
-            optional(\App\Models\Movie\EntityCover::query()->where('entity_id' , $entity_id)->get())
+            optional(
+                $type == 'entity' ?
+                    \App\Models\Movie\EntityCover::query()->where('entity_id' , $entity_id)->get():
+                    \App\Models\Movie\MovieCover::query()->where('movie_id' , $entity_id)->get()
+
+            )
                 ->sortBy(fn($img) => abs($img->ratio_type->division() - ((float)$width / (float) $height)))
                 ->filter(fn($img) => $img->path and file_exists(storage_path('app/public/' . $img->path)))
         )->first()?->path ;

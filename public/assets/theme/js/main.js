@@ -37,7 +37,7 @@
             });
             movies.forEach(el => {
                 if (isInViewport(el)) {
-                    placeImage(el,'entity');
+                    placeImage(el,'movie');
                 }
             });
         }
