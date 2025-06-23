@@ -89,7 +89,7 @@ Table of contents
 }
 
 @font-face {
-  font-family: 'estedad-lightbold';
+
   src: url(../fonts/Estedad-Bold.woff2);
 }
 
@@ -1859,7 +1859,7 @@ label {
   font-size: 18px;
   color: var(--heading-color);
   font-weight: 500;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -1992,7 +1992,7 @@ label {
   font-weight: 500;
   font-size: 17px;
   margin-bottom: 15px;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -2193,7 +2193,7 @@ label {
 .movie-item .movie-season,
 .movie-item .movie-time{
   color: var(--body-text-color);
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -2616,7 +2616,7 @@ label {
 .movie-single-content .movie-download h5{
   color: var(--heading-color);
   margin-bottom: 20px;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -2780,7 +2780,7 @@ label {
 .movie-comment .comment-author .author-info h5{
   color: var(--heading-color);
   margin-bottom: 4px;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -2842,7 +2842,7 @@ label {
 .movie-comment .comment-form h4{
   color: var(--heading-color);
   margin-bottom: 25px;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -2927,7 +2927,7 @@ label {
 
 .movie-single2 .movie-server h5{
   color: var(--heading-color);
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -3565,7 +3565,7 @@ label {
   background: var(--theme-color);
   padding: 10px 25px 20px 25px;
   border-radius: 10px 10px 50px 50px;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -3573,7 +3573,7 @@ label {
   color: var(--color-white);
   margin-bottom: 5px;
   font-weight: 500;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -3774,7 +3774,7 @@ label {
   color:  var(--heading-color);
   margin-bottom: 2px;
   font-weight: 500;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -3903,7 +3903,7 @@ label {
   font-size: 22px;
   font-weight: 500;
   text-transform: capitalize;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -3961,7 +3961,7 @@ label {
   font-size: 24px;
   font-weight: 500;
   color: var(--heading-color);
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -4005,7 +4005,7 @@ label {
   text-transform: capitalize;
   font-size: 38px;
   font-weight: 500;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -4173,7 +4173,7 @@ label {
 .blog-single-info .blog-details-title{
   font-size: 34px;
   color:  var(--heading-color);
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -4283,7 +4283,7 @@ label {
   color: var(--theme-color);
   font-weight: 500;
   margin: 8px 0;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -4735,7 +4735,7 @@ label {
   font-weight: 600;
   margin-bottom: 8px;
   color:  var(--heading-color);
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -4862,7 +4862,7 @@ label {
   color: var(--heading-color);
   font-size: 20px;
   font-weight: 500;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -4935,7 +4935,7 @@ label {
   font-size: 20px;
   color: var(--heading-color);
   box-shadow: none !important;
-  font-family: 'estedad-lightbold';
+
 
 }
 
@@ -5847,7 +5847,7 @@ label {
 .terms-content h3 {
   color: var(--heading-color);
   margin-bottom: 23px;
-    font-family: 'estedad-lightbold';
+
 
 }
 
@@ -5898,7 +5898,7 @@ label {
   font-size: 20px;
   font-weight: 500;
   z-index: 1;
-  font-family: 'estedad-lightbold';
+
 
 }
 

@@ -85,6 +85,18 @@ class Movie extends Model
         });
     }
 
+
+    public function durationTitle($format = '%d ساعت %d دقیقه'): string
+    {
+        if ($format == '%d ساعت %d دقیقه' and intdiv($this->attributes['duration'], 60) == 0)
+            return  $this->attributes['duration'] .' دقیقه' ;
+        if ($format == '%d ساعت %d دقیقه' and $this->attributes['duration'] %  60 == 0)
+            return intdiv($this->attributes['duration'], 60) .' ساعت' ;
+        return  sprintf($format , intdiv($this->attributes['duration'], 60) , ($this->attributes['duration'] % 60)) ;
+    }
+
+
+
     public function entity(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Entity::class);

@@ -25,7 +25,7 @@
                                 <div class="hero-info" data-animation="fadeInDown" data-delay=".75s">
                                     <span class="rating"><span><i class="far fa-star"></i> {{ $item->imdb_rate }}</span>IMDB</span>
                                     <span class="year">{{ $item->pro_year }}</span>
-                                    <span class="time">{{ $item->duration }} دقیقه</span>
+                                    <span class="movie-time">{{ $item->durationTitle() }}</span>
                                     <div class="genre">
                                         @foreach($item->entity->genres()->take(3)->get() as $genre)
                                             <a href="{{ route('genre' , ['genre' => $genre->slug]) }}">{{ $genre->title }}</a>
@@ -80,7 +80,7 @@
                     <div class="movie-content">
                         <h6 class="movie-title"><a href="{{ route('movie.short' , $item->id ) }}">{{ $item->title ?? $item->entity->title }}</a></h6>
                         <div class="movie-info">
-                            <span class="movie-time">{{ $item->duration }} دقیقه</span>
+                            <span class="movie-time">{{ $item->durationTitle() }}</span>
                             <div class="movie-genre">
                                 @foreach($item->entity->genres()->take(3)->get() as $genre)
                                     <a href="{{ route('genre' , ['genre' => $genre->slug]) }}">{{ $genre->title }}</a>
@@ -91,6 +91,43 @@
                         </div>
                     </div>
                 </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    <div class="movie-area pt-70">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="site-heading-inline">
+                        <h2 class="site-title">جدیدترین فیلم‌های سینمایی</h2>
+                        <a href="#" class="theme-btn  gap-1">مشاهده همه<i class="far fa-angles-left"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="movie-slider owl-carousel owl-theme">
+                @foreach(MovieRepository::futureRelease()->movie()->lastItems(20) as $item)
+                    <div class="movie-item">
+                        {{--                    <span class="movie-quality">اچ دی</span>--}}
+                        <div class="movie-img">
+                            <img data-ratio="3/4" style="aspect-ratio: 3 / 4;" data-entityId="{{ $item->entity_id }}" src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image-300x225.png" alt="{{ $item->title ?? $item->entity->title }}">
+                            <a href="{{ route('movie.short' , $item->id ) }}" class="movie-play"><i class="icon-play-3"></i></a>
+                        </div>
+                        <div class="movie-content">
+                            <h6 class="movie-title"><a href="{{ route('movie.short' , $item->id ) }}">{{ $item->title ?? $item->entity->title }}</a></h6>
+                            <div class="movie-info">
+                                <span class="movie-time">{{ $item->durationTitle() }}</span>
+                                <div class="movie-genre">
+                                    @foreach($item->entity->genres()->take(3)->get() as $genre)
+                                        <a href="{{ route('genre' , ['genre' => $genre->slug]) }}">{{ $genre->title }}</a>
+                                        @if (!$loop->last),
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
             </div>
         </div>
@@ -124,7 +161,7 @@
                 </div>
             </div>
             <div class="movie-slider owl-carousel owl-theme">
-                @foreach(MovieRepository::series()->lastItems(20) as $item)
+                @foreach(MovieRepository::futureRelease()->series()->lastItems(20) as $item)
                 <div class="movie-item">
                     <span class="movie-quality">قسمت {{ $item->episode }} @if($item->entity->type == \App\Enums\EntityType::MultiSeasonSeries) فصل {{ $item->season }}@endif </span>
                     <div class="movie-img">
@@ -134,7 +171,7 @@
                     <div class="movie-content">
                         <h6 class="movie-title"><a href="{{ route('movie.short' , $item->id ) }}">{{ $item->title ?? $item->entity->title }}</a></h6>
                         <div class="movie-info">
-                            <span class="movie-time">{{ $item->duration }} دقیقه</span>
+                            <span class="movie-time">{{ $item->durationTitle() }}</span>
                             <div class="movie-genre">
                                 @foreach($item->entity->genres()->take(3)->get() as $genre)
                                     <a href="{{ route('genre' , ['genre' => $genre->slug]) }}">{{ $genre->title }}</a>

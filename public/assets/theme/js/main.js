@@ -12,7 +12,7 @@
         }
 
         function placeImage(el, type) {
-            const entityId = el.getAttribute("data-entityId");
+            const entityId = el.getAttribute(`data-${type}Id`);
             const width = Math.floor(el.offsetWidth);
             const height = Math.floor(el.offsetHeight);
             var imageUrl = `/${type}-cover/${width}/${height}/${entityId}`;

@@ -7,48 +7,47 @@
 
     <div class="site-breadcrumb" data-entityId="{{ $movie->entity_id }}" >
         <div class="container">
-            <h2 class="breadcrumb-title">پخش تلوزیون تک</h2>
-            <ul class="breadcrumb-menu">
-                <li><a href="index.html">خانه</a></li>
-                <li class="active">پخش تلوزیون تک</li>
-            </ul>
+{{--            <h2 class="breadcrumb-title">{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}</h2>--}}
         </div>
     </div>
 
 
-    <div class="movie-single py-80" dir="rtl">
+    <div class="movie-single" dir="rtl">
         <div class="container">
 
-            <div class="movie-single-content mt-20">
+            <div class="movie-single-content">
                 <div class="row">
                     <div class="col-md-4 col-lg-3">
                         <div class="movie-img">
-                            <img src="images/s8.jpg" alt="">
+                            <img style="width: 100%;aspect-ratio: 3/4" data-ratio="3/4" data-movieId="{{ $movie->id }}" alt="{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}">
                         </div>
                     </div>
                     <div class="col-md-8 col-lg-6 border-end">
                         <div class="movie-info">
-                            <h4 class="movie-name">
-                                چیزهای عجیب
-                                <a href="https://www.youtube.com/watch?v=ckHzmP1evNU"
-                                   class="theme-btn popup-youtube"><span
-                                        class="fas fa-video"></span>تریلر</a>
+                            <h4 class="movie-name d-flex justify-items-center">
+                                {{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}
+                                @if( in_array($movie->entity->type , [\App\Enums\EntityType::MultiSeasonSeries , \App\Enums\EntityType::Series]) )
+                                <div style="width: fit-content;" class="theme-btn popup-youtube"><span
+                                        class="fas fa-video"></span>
+                                    قسمت {{ $movie->episode }} @if($movie->entity->type == \App\Enums\EntityType::MultiSeasonSeries) فصل {{ $movie->season }}@endif
+                                </div>
+                                @endif
                             </h4>
                             <p>
-                                این یک واقعیت ثابت شده است که خواننده از خواندنی ها حواسش پرت می شود
-                                صفحه محتوا وقتی به طرح بندی آن نگاه می کنید. نکته استفاده از این است
-                                بر خلاف استفاده از حروف، توزیع کم و بیش عادی حروف دارد
-                                محتوایی که در اینجا وجود دارد که آن را شبیه به انگلیسی خواندنی می کند.
+                                {{ $movie->description ?? $movie->entity->about_movie }}
                             </p>
                             <div class="row mt-3">
                                 <div class="col-md-6">
+                                    @if(count($movie->entity->genres) > 0 )
                                     <div class="movie-info-item">
                                         <strong>ژانر:</strong>
-                                        <a href="#">اکشن,</a>
-                                        <a href="#">جنایی,</a>
-                                        <a href="#">فانتزی,</a>
-                                        <a href="#">درام</a>
+                                        @foreach($movie->entity->genres as $genre)
+                                            <a href="{{ route('genre' , ['genre' => $genre->slug]) }}">{{ $genre->title }}</a>
+                                            @if (!$loop->last),
+                                            @endif
+                                        @endforeach
                                     </div>
+                                    @endif
                                     <div class="movie-info-item">
                                         <strong>کارگردان:</strong>
                                         <a href="#">نیما نوبخت</a>
@@ -60,28 +59,38 @@
                                         <a href="#">آنجلینا جولی,</a>
                                         <a href="#">آنتونی روبرت</a>
                                     </div>
-                                    <div class="movie-info-item">
-                                        <strong>کشور:</strong>
-                                        <a href="#">آمریکا</a>
-                                    </div>
+                                    @if(count($movie->entity->countries) > 0 )
+                                        <div class="movie-info-item">
+                                            <strong>کشور:</strong>
+                                            @foreach($movie->entity->countries as $country)
+                                                <a href="{{ route('country' , ['code' => $country->code , 'title' => str()->slug($country->title_en)]) }}">{{ $country->title }}</a>
+                                                @if (!$loop->last),
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="col-md-6">
                                     <div class="movie-info-item">
                                         <strong>مدت زمان:</strong>
-                                        <span>۲ ساعت ۳۰ دقیقه</span>
+                                        <span>{{ $movie->durationTitle() }}</span>
                                     </div>
                                     <div class="movie-info-item">
                                         <strong>کیفیت:</strong>
                                         <span class="quality">اچ دی</span>
                                     </div>
+                                    @if($movie->pro_year ?? $movie->entity->pro_year)
                                     <div class="movie-info-item">
                                         <strong>سال تولید:</strong>
-                                        <a href="#">۲۰۲۳</a>
+                                        <a href="{{ route('year' , ['year' => $movie->pro_year ?? $movie->entity->pro_year]) }}">{{ $movie->pro_year ?? $movie->entity->pro_year }}</a>
                                     </div>
+                                    @endif
+                                    @if($movie->imdb_rate)
                                     <div class="movie-info-item">
                                         <strong>ای ام دی بی:</strong>
-                                        <span class="rating">۹.۷</span>
+                                        <span class="rating">{{ $movie->imdb_rate }}</span>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

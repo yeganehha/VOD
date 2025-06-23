@@ -22,9 +22,7 @@ trait DynamicRepository
      */
     public static function __callStatic($method, $parameters)
     {
-        if ( is_null( self::$instance ) ) {
-            self::$instance = new static();
-        }
+        self::$instance = new static();
         $method = '_'.str($method)->camel();
         if ( ! method_exists(self::$instance, $method)) {
             throw new BadMethodCallException(sprintf(

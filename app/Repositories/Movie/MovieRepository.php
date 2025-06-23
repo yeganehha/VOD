@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * @method Collection<Movie> lastItemslastItems($item = 1);
- * @method MovieRepository futureRelease();
- * @method MovieRepository series();
- * @method MovieRepository singleShow($entitySlug , $episode, $season);
+ * @method static Collection<Movie> lastItemslastItems($item = 1);
+ * @method static MovieRepository futureRelease();
+ * @method static MovieRepository series();
+ * @method static MovieRepository movie();
+ * @method static MovieRepository singleShow($entitySlug , $episode, $season);
  */
 class MovieRepository
 {
@@ -37,6 +38,11 @@ class MovieRepository
     {
         $this->query
             ->whereHas('entity' , fn(Builder $builder) => $builder->whereIn('type' , collect(EntityType::cases())->filter(fn($item) => $item->isMultiEpisode())->toArray()));
+    }
+    private function _movie(): void
+    {
+        $this->query
+            ->whereHas('entity' , fn(Builder $builder) => $builder->whereNotIn('type' , collect(EntityType::cases())->filter(fn($item) => $item->isMultiEpisode())->toArray()));
     }
     private function _singleShow($entitySlug , $episode, $season): void
     {
