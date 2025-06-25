@@ -31,6 +31,7 @@ class CrewFactory extends Factory
             'biography' => fake('fa')->paragraphs(asText: true),
             'biography_en' => fake('en')->paragraphs(asText: true),
             'birthday' => fake()->date(),
+            'avatar' => fake()->randomElement(['Avatar/comment01.jpeg','Avatar/comment02.jpeg','Avatar/comment03.jpeg','Avatar/comment04.jpeg','Avatar/comment05.jpeg']),
             'birth_location_id' => fake()->randomNumber(1,250),
             'gender' => fake()->randomElement(Gender::values()),
             'main_position_id' => fake()->randomNumber(1,26),

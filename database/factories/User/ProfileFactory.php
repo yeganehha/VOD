@@ -25,6 +25,7 @@ class ProfileFactory extends Factory
             'name' => fake()->name(),
             'age_range_id' => fake()->randomElement([1,2,3,4,5,6]),
             'main_user' => false,
+            'avatar' => fake()->randomElement(['Avatar/comment01.jpeg','Avatar/comment02.jpeg','Avatar/comment03.jpeg','Avatar/comment04.jpeg','Avatar/comment05.jpeg']),
         ];
     }
 

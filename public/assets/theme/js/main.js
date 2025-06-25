@@ -214,6 +214,7 @@
     });
     $('.testimonial-slider').owlCarousel({
         loop: true,
+        rtl:true,
         margin: 10,
         nav: false,
         dots: true,

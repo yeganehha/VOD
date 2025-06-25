@@ -8,6 +8,7 @@ use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -19,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property User $profile
  * @property string $comment
  * @property PublishStatus $publish_status
+ * @property Collection<Comment> $chields
  * @property boolean $is_spoiler
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -51,6 +53,11 @@ class Comment extends Model
     public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Comment::class);
+    }
+
+    public function chields(): \Illuminate\Database\Eloquent\Relations\hasMany
+    {
+        return $this->hasMany(Comment::class , 'parent_id');
     }
 
     public function profile(): \Illuminate\Database\Eloquent\Relations\BelongsTo

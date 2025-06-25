@@ -69,18 +69,18 @@
                                             @endforeach
                                         </div>
                                     @endif
+                                    @if($movie->pro_year ?? $movie->entity->pro_year)
+                                        <div class="movie-info-item">
+                                            <strong>سال تولید:</strong>
+                                            <a href="{{ route('year' , ['year' => $movie->pro_year ?? $movie->entity->pro_year]) }}">{{ $movie->pro_year ?? $movie->entity->pro_year }}</a>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="col-md-6">
                                     <div class="movie-info-item">
                                         <strong>مدت زمان:</strong>
                                         <span>{{ $movie->durationTitle() }}</span>
                                     </div>
-                                    @if($movie->pro_year ?? $movie->entity->pro_year)
-                                    <div class="movie-info-item">
-                                        <strong>سال تولید:</strong>
-                                        <a href="{{ route('year' , ['year' => $movie->pro_year ?? $movie->entity->pro_year]) }}">{{ $movie->pro_year ?? $movie->entity->pro_year }}</a>
-                                    </div>
-                                    @endif
                                     @if($movie->imdb_rate)
                                     <div class="movie-info-item">
                                         <strong>ای ام دی بی:</strong>
@@ -122,18 +122,20 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="movie-keyword">
-                            <span>کلمه کلیدی :</span>
-                            <a href="#">مشاهده</a>
-                            <a href="#">استریم</a>
-                            <a href="#">اکشن</a>
-                            <a href="#">۲۰۲۳</a>
-                            <a href="#">دانود اچ دی</a>
-                            <a href="#">جنایی</a>
-                            <a href="#">دران</a>
-                            <a href="#">فیلم اچ دی</a>
-                            <a href="#">استریم اچ دی</a>
-                            <a href="#">فیلم جدید</a>
+                        <div class="testimonial-slider owl-carousel owl-theme">
+                            @foreach($movie->crew as $crew)
+                            <div class="testimonial-item">
+                                <div class="testimonial-author" style="border-top: none; margin-top: 0; padding-top: 0">
+                                    <div class="author-img">
+                                        <img src="{{ asset('storage/'.$crew->crew->avatar)  }}" alt="{{ $crew->crew->name }}">
+                                    </div>
+                                    <div class="author-info">
+                                        <strong>{{ $crew->crew->name }}</strong>
+                                        <p>{{ $crew->position->title }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -193,15 +195,15 @@
                         </div>
                         <div class="comment-list">
                             @foreach($movie->comments as $comment)
-                                <div class="comment-item comment-reply1">
+                                <div class="comment-item">
                                     <div class="comment-img">
                                         <img src="{{ $comment->profile->avatar }}" alt="{{ $comment->profile->name }}">
                                     </div>
                                     <div class="comment-content">
                                         <div class="comment-author">
-                                            <div class="author-info">
+                                            <div class="author-info" title="{{ verta($comment->created_at)->format('l d F Y H:i') }}">
                                                 <h5>{{ $comment->profile->name }}</h5>
-                                                <span><i class="far fa-clock"></i>{{ verta($comment->created_at)->format('l d F Y H:i') }}</span>
+                                                <span><i class="far fa-clock"></i>{{ $comment->created_at->diffForHumans() }}</span>
                                             </div>
                                         </div>
                                         <div class="comment-text">
@@ -214,68 +216,31 @@
 {{--                                        </div>--}}
                                     </div>
                                 </div>
+                                @if($comment->chields()->count() > 0)
+                                    @foreach($comment->chields as $child)
+                                        <div class="comment-item comment-reply">
+                                            <div class="comment-img">
+                                                <img src="{{ $child->profile->avatar }}" alt="{{ $child->profile->name }}">
+                                            </div>
+                                            <div class="comment-content">
+                                                <div class="comment-author">
+                                                    <div class="author-info" title="{{ verta($child->created_at)->format('l d F Y H:i') }}">
+                                                        <h5>{{ $child->profile->name }}</h5>
+                                                        <span><i class="far fa-clock"></i>{{ $child->created_at->diffForHumans() }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="comment-text">
+                                                    <p>{!! nl2br(e($child->comment)) !!}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             @endforeach
-
-                            <div class="comment-item ">
-                                <div class="comment-img">
-                                    <img src="images/com-2.jpg" alt="thumb">
-                                </div>
-                                <div class="comment-content">
-                                    <div class="comment-author">
-                                        <div class="author-info">
-                                            <h5>اکبر عبدی</h5>
-                                            <span><i class="far fa-clock"></i>۰۴ خرداد, ۱۴۰۳, ۱۰.۳۰ عصر</span>
-                                        </div>
-                                    </div>
-                                    <div class="comment-text">
-                                        <p>تنوع زیادی از گذر در دسترس است اما اکثریت
-                                            به نوعی توسط طنز تزریقی دچار تغییر شده اند
-                                            کلمات تصادفی غیرقابل شک حتی کمی باورپذیر به نظر می رسند. اگر
-                                            شما می خواهید از یک پاساژ استفاده کنید، باید مطمئن شوید که وجود ندارد
-                                            هر چیز شرم آور پنهان در وسط متن. همه
-                                            ژنراتورها در اینترنت تمایل دارند تکه های از پیش تعریف شده را به عنوان تکرار کنند
-                                            ضروری است که این اولین مولد واقعی در اینترنت باشد.
-                                        </p>
-                                    </div>
-                                    <div class="comment-action">
-                                        <a href="#"><i class="far fa-reply"></i>پاسخ</a>
-                                        <a href="#"><i class="far fa-thumbs-up"></i>۲.۵ هزار</a>
-                                        <a href="#"><i class="far fa-thumbs-down"></i>۱.۲ هزار</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="comment-item">
-                                <div class="comment-img">
-                                    <img src="images/com-3.jpg" alt="thumb">
-                                </div>
-                                <div class="comment-content">
-                                    <div class="comment-author">
-                                        <div class="author-info">
-                                            <h5>یلدا ملک پور</h5>
-                                            <span><i class="far fa-clock"></i>۰۴ بهمن, ۱۴۰۳, ۱۰.۳۰ عصر</span>
-                                        </div>
-                                    </div>
-                                    <div class="comment-text">
-                                        <p> تنوع زیادی از گذر در دسترس است اما اکثریت
-                                            به نوعی توسط طنز تزریقی دچار تغییر شده اند
-                                            کلمات تصادفی غیرقابل شک حتی کمی باورپذیر به نظر می رسند. اگر
-                                            شما می خواهید از یک پاساژ استفاده کنید، باید مطمئن شوید که وجود ندارد
-                                            هر چیز شرم آور پنهان در وسط متن. همه
-                                            ژنراتورها در اینترنت تمایل دارند تکه های از پیش تعریف شده را به عنوان تکرار کنند
-                                            ضروری است که این اولین مولد واقعی در اینترنت باشد.
-                                        </p>
-                                    </div>
-                                    <div class="comment-action">
-                                        <a href="#"><i class="far fa-reply"></i>پاسخ</a>
-                                        <a href="#"><i class="far fa-thumbs-up"></i>۲.۵ هزار</a>
-                                        <a href="#"><i class="far fa-thumbs-down"></i>۱.۲ هزار</a>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                        <div class="text-center">
-                            <a href="#" class="theme-btn"><span class="fas fa-rotate-left"></span>بارگزاری بیشتر</a>
-                        </div>
+{{--                        <div class="text-center">--}}
+{{--                            <a href="#" class="theme-btn"><span class="fas fa-rotate-left"></span>بارگزاری بیشتر</a>--}}
+{{--                        </div>--}}
                         <div class="comment-form" id="send-comment">
                             <h4>ارسال دیدگاه</h4>
                             <form action="#">
@@ -308,6 +273,4 @@
         </div>
     </div>
 
-        </div>
-    </div>
 @endsection
