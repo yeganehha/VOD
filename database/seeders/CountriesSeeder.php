@@ -19,10 +19,14 @@ class CountriesSeeder extends Seeder
     public function run()
     {
         // Fetch country data from SimpleLocalize
-        $countries = Http::get('https://cdn.simplelocalize.io/public/v1/countries')->json();
+        $countries = cache()->rememberForever('countries_seeder_cdn.simplelocalize.io'
+                        , fn() => Http::get('https://cdn.simplelocalize.io/public/v1/countries')->json()
+                    );
 
         // Fetch Persian names
-        $persianNames = Http::get('https://raw.githubusercontent.com/umpirsky/country-list/master/data/fa_IR/country.json')->json();
+        $persianNames =  cache()->rememberForever('countries_seeder_raw.githubusercontent.com'
+            , fn() => Http::get('https://raw.githubusercontent.com/umpirsky/country-list/master/data/fa_IR/country.json')->json()
+        );
 
         // Prepare storage
         $flagDirectory = 'countries';
