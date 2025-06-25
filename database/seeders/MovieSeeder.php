@@ -34,6 +34,21 @@ class MovieSeeder extends Seeder
     public function run(): void
     {
         $entities = Entity::all();
+        foreach ( glob(public_path('assets/theme/images/*.*')) as $filename ) {
+            list($width, $height, $type, $attr) = getimagesize($filename);
+            if( $height == 0 )
+                continue;
+            $imgRatio = ((float)$width / (float)$height);
+            $selectedRatio = PHP_INT_MAX ;
+            $selectedRatioCase = null;
+            foreach ( RatioType::cases() as $case ){
+                if ( abs($case->division() - $imgRatio) <= $selectedRatio){
+                    $selectedRatio = abs($case->division() - $imgRatio);
+                    $selectedRatioCase = $case;
+                }
+            }
+            $this->images[$selectedRatioCase->value][] = $filename;
+        }
         foreach ( RatioType::cases() as $case ){
             $selectedRatio = PHP_INT_MAX ;
             $selectedRatioImage = null;

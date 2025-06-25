@@ -154,8 +154,8 @@
                 @endif
                 <div class="tab-content" id="season-pills-tabContent">
                     @for($season = 1 ; $season <= $movie->entity->movies()->max('season') ; $season++)
-                    <div class="tab-pane fade {{ $movie->season == $season ? 'show active' : '' }}" id="pills-season1" role="tabpanel"
-                         aria-labelledby="pills-season-tab{{$season}}" tabindex="{{$season - 1}}">
+                    <div class="tab-pane fade {{ $movie->season == $season ? 'show active' : '' }}" id="pills-season{{$season}}" role="tabpanel"
+                         aria-labelledby="pills-season-tab{{$season}}" tabindex="0">
                         <div class="season-content">
                             <div class="row">
 
@@ -183,6 +183,130 @@
                     @endfor
             </div>
             @endif
+
+
+
+                    <div class="movie-comment mt-50">
+                        <div class="site-heading-inline">
+                            <h2 class="site-title">دیدگاه‌ها</h2>
+                            <a href="#send-comment" class="theme-btn">نظر خود را به اشتراک بگذارید.<i class="far fa-paper-plane"></i></a>
+                        </div>
+                        <div class="comment-list">
+                            @foreach($movie->comments as $comment)
+                                <div class="comment-item comment-reply1">
+                                    <div class="comment-img">
+                                        <img src="{{ $comment->profile->avatar }}" alt="{{ $comment->profile->name }}">
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-author">
+                                            <div class="author-info">
+                                                <h5>{{ $comment->profile->name }}</h5>
+                                                <span><i class="far fa-clock"></i>{{ verta($comment->created_at)->format('l d F Y H:i') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="comment-text">
+                                            <p>{!! nl2br(e($comment->comment)) !!}</p>
+                                        </div>
+{{--                                        <div class="comment-action">--}}
+{{--                                            <a href="#"><i class="far fa-reply"></i>پاسخ</a>--}}
+{{--                                            <a href="#"><i class="far fa-thumbs-up"></i>۲.۵ هزار</a>--}}
+{{--                                            <a href="#"><i class="far fa-thumbs-down"></i>۱.۲ هزار</a>--}}
+{{--                                        </div>--}}
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            <div class="comment-item ">
+                                <div class="comment-img">
+                                    <img src="images/com-2.jpg" alt="thumb">
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-author">
+                                        <div class="author-info">
+                                            <h5>اکبر عبدی</h5>
+                                            <span><i class="far fa-clock"></i>۰۴ خرداد, ۱۴۰۳, ۱۰.۳۰ عصر</span>
+                                        </div>
+                                    </div>
+                                    <div class="comment-text">
+                                        <p>تنوع زیادی از گذر در دسترس است اما اکثریت
+                                            به نوعی توسط طنز تزریقی دچار تغییر شده اند
+                                            کلمات تصادفی غیرقابل شک حتی کمی باورپذیر به نظر می رسند. اگر
+                                            شما می خواهید از یک پاساژ استفاده کنید، باید مطمئن شوید که وجود ندارد
+                                            هر چیز شرم آور پنهان در وسط متن. همه
+                                            ژنراتورها در اینترنت تمایل دارند تکه های از پیش تعریف شده را به عنوان تکرار کنند
+                                            ضروری است که این اولین مولد واقعی در اینترنت باشد.
+                                        </p>
+                                    </div>
+                                    <div class="comment-action">
+                                        <a href="#"><i class="far fa-reply"></i>پاسخ</a>
+                                        <a href="#"><i class="far fa-thumbs-up"></i>۲.۵ هزار</a>
+                                        <a href="#"><i class="far fa-thumbs-down"></i>۱.۲ هزار</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comment-item">
+                                <div class="comment-img">
+                                    <img src="images/com-3.jpg" alt="thumb">
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-author">
+                                        <div class="author-info">
+                                            <h5>یلدا ملک پور</h5>
+                                            <span><i class="far fa-clock"></i>۰۴ بهمن, ۱۴۰۳, ۱۰.۳۰ عصر</span>
+                                        </div>
+                                    </div>
+                                    <div class="comment-text">
+                                        <p> تنوع زیادی از گذر در دسترس است اما اکثریت
+                                            به نوعی توسط طنز تزریقی دچار تغییر شده اند
+                                            کلمات تصادفی غیرقابل شک حتی کمی باورپذیر به نظر می رسند. اگر
+                                            شما می خواهید از یک پاساژ استفاده کنید، باید مطمئن شوید که وجود ندارد
+                                            هر چیز شرم آور پنهان در وسط متن. همه
+                                            ژنراتورها در اینترنت تمایل دارند تکه های از پیش تعریف شده را به عنوان تکرار کنند
+                                            ضروری است که این اولین مولد واقعی در اینترنت باشد.
+                                        </p>
+                                    </div>
+                                    <div class="comment-action">
+                                        <a href="#"><i class="far fa-reply"></i>پاسخ</a>
+                                        <a href="#"><i class="far fa-thumbs-up"></i>۲.۵ هزار</a>
+                                        <a href="#"><i class="far fa-thumbs-down"></i>۱.۲ هزار</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <a href="#" class="theme-btn"><span class="fas fa-rotate-left"></span>بارگزاری بیشتر</a>
+                        </div>
+                        <div class="comment-form" id="send-comment">
+                            <h4>ارسال دیدگاه</h4>
+                            <form action="#">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control"
+                                                   placeholder="نام و نام خانوادگی*">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="email" class="form-control"
+                                                   placeholder="ایمیل شما*">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <textarea class="form-control" rows="5"
+                                                      placeholder="دیدگاه و نظر شما*"></textarea>
+                                        </div>
+                                        <button type="submit" class="theme-btn">دیدگاه پست<i
+                                                class="far fa-paper-plane"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
 
         </div>
     </div>
