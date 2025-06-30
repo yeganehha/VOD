@@ -44,4 +44,9 @@ class Profile extends Model
     {
         return $this->belongsTo(AgeRange::class);
     }
+
+    public function avatarLink(): string
+    {
+        return ( ! empty($this->avatar)) ? asset('storage/'. $this->avatar) : asset('assets/images/avatar.png');
+    }
 }

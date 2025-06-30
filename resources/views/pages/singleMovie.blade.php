@@ -197,7 +197,7 @@
                             @foreach($movie->comments as $comment)
                                 <div class="comment-item">
                                     <div class="comment-img">
-                                        <img src="{{ $comment->profile->avatar }}" alt="{{ $comment->profile->name }}">
+                                        <img src="{{ $comment->profile->avatarLink() }}" alt="{{ $comment->profile->name }}">
                                     </div>
                                     <div class="comment-content">
                                         <div class="comment-author">
