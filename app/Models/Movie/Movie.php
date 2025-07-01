@@ -97,6 +97,27 @@ class Movie extends Model
         return  sprintf($format , intdiv($this->attributes['duration'], 60) , ($this->attributes['duration'] % 60)) ;
     }
 
+    public function getLink($short=false): string
+    {
+        if ( $short )
+            return route('movie.short' , $this->id);
+        if ( $this->entity->type == \App\Enums\EntityType::Movie )
+            return response()->redirectTo(route("movie.show" , $this->entity->slug));
+        if ( $this->entity->type == \App\Enums\EntityType::MultiSeasonSeries )
+            return response()->redirectTo(route("movie.series" , [$this->entity->slug, $this->season, $this->episode]));
+        return response()->redirectTo(route("movie.episode" , [$this->entity->slug,$this->episode]));
+    }
+
+    public function getImage($width, $height): ?string
+    {
+        $path = optional(
+            $this->covers
+                ->sortBy(fn($img) => abs($img->ratio_type->division() - ((float)$width / (float) $height)))
+                ->filter(fn($img) => $img->path and file_exists(storage_path('app/public/' . $img->path)))
+        )->first()?->path;
+        return $path ? asset('storage/'.$path) : $this->entity->getImage($width, $height);
+    }
+
 
 
     public function entity(): \Illuminate\Database\Eloquent\Relations\BelongsTo

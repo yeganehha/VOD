@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-md-4 col-lg-3">
                         <div class="movie-img">
-                            <img style="width: 100%;aspect-ratio: 3/4" data-ratio="3/4" data-movieId="{{ $movie->id }}" alt="{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}">
+                            <img style="width: 100%;aspect-ratio: 3/4" src="{{ $movie->getImage(3,4) }}"  alt="{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}">
                         </div>
                     </div>
                     <div class="col-md-8 col-lg-6 border-end">

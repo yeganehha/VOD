@@ -74,7 +74,7 @@
                 <div class="movie-item">
 {{--                    <span class="movie-quality">اچ دی</span>--}}
                     <div class="movie-img">
-                        <img data-ratio="3/4" style="aspect-ratio: 3 / 4;" data-entityId="{{ $item->entity_id }}" src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image-300x225.png" alt="{{ $item->title ?? $item->entity->title }}">
+                        <img src="{{ $item->getImage(3,4) }}" style="aspect-ratio: 3 / 4;" alt="{{ $item->title ?? $item->entity->title }}">
                         <a href="{{ route('movie.short' , $item->id ) }}" class="movie-play"><i class="icon-play-3"></i></a>
                     </div>
                     <div class="movie-content">
@@ -111,7 +111,7 @@
                     <div class="movie-item">
                         {{--                    <span class="movie-quality">اچ دی</span>--}}
                         <div class="movie-img">
-                            <img data-ratio="3/4" style="aspect-ratio: 3 / 4;" data-entityId="{{ $item->entity_id }}" src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image-300x225.png" alt="{{ $item->title ?? $item->entity->title }}">
+                            <img src="{{ $item->getImage(3,4) }}" style="aspect-ratio: 3 / 4;" alt="{{ $item->title ?? $item->entity->title }}">
                             <a href="{{ route('movie.short' , $item->id ) }}" class="movie-play"><i class="icon-play-3"></i></a>
                         </div>
                         <div class="movie-content">
@@ -165,7 +165,7 @@
                 <div class="movie-item">
                     <span class="movie-quality">قسمت {{ $item->episode }} @if($item->entity->type == \App\Enums\EntityType::MultiSeasonSeries) فصل {{ $item->season }}@endif </span>
                     <div class="movie-img">
-                        <img data-ratio="3/4" style="aspect-ratio: 3 / 4;" data-entityId="{{ $item->entity_id }}" src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image-300x225.png" alt="{{ $item->title ?? $item->entity->title }}">
+                        <img src="{{ $item->getImage(3,4) }}" style="aspect-ratio: 3 / 4;" alt="{{ $item->title ?? $item->entity->title }}">
                         <a href="{{ route('movie.short' , $item->id ) }}" class="movie-play"><i class="icon-play-3"></i></a>
                     </div>
                     <div class="movie-content">
