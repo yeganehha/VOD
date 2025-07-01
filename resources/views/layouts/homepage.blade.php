@@ -95,7 +95,7 @@
             </div>
         </div>
     </div>
-
+    @include('pages.searchBox')
     <div class="movie-area pt-70">
         <div class="container">
             <div class="row">

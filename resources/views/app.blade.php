@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="{{ asset('assets/theme/css/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/theme/css/magnific-popup.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/theme/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/theme/css/nice-select.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/theme/css/style.css') }}">
 
 {{--    @vite('resources/css/app.css')--}}
@@ -76,6 +77,7 @@
 <script src="{{ asset('assets/theme/js/owl.carousel.min.js') }}"></script>
 <script src="{{ asset('assets/theme/js/counter-up.js') }}"></script>
 <script src="{{ asset('assets/theme/js/wow.min.js') }}"></script>
+<script src="{{ asset('assets/theme/js/jquery.nice-select.min.js') }}"></script>
 <script src="{{ asset('assets/theme/js/main.js') }}"></script>
 
 @stack('footer')
