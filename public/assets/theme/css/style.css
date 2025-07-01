@@ -1952,7 +1952,7 @@ label {
 }
 
 .filter-select .nice-select .list{
-  width: 100%;
+  min-width: 100%;
   padding: 12px;
   border-radius: 10px;
   background: var(--theme-bg2);
