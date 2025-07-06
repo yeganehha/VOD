@@ -165,8 +165,7 @@
                                 <div class="col-md-6 col-lg-4 col-xl-3">
                                     <div class="movie-item">
                                         <div class="movie-img">
-                                            <img style="width: 100%;min-height: 170px" data-movieId="{{ $episode->id }}" src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image-300x225.png" alt="قسمت
-                                                {{ $episode->episode }} {{ $episode->title }}">
+                                            <img style="width: 100%;min-height: 170px" src="{{ $episode->getImage(2,1) }}"  alt="قسمت {{ $episode->episode }} {{ $episode->title }}">
                                             <a href="{{ route('movie.short' , $episode->id ) }}" class="movie-play"><i class="icon-play-4"></i></a>
                                         </div>
                                         <div class="movie-content">

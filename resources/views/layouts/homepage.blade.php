@@ -95,7 +95,7 @@
             </div>
         </div>
     </div>
-    @include('pages.searchBox')
+    @include('pages.searchBox' , ['values' => []])
     <div class="movie-area pt-70">
         <div class="container">
             <div class="row">

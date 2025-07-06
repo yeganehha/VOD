@@ -21,12 +21,18 @@ class MoviesController extends Controller
     {
         $path = cache()->remember($type.'_cover_path_'.$width.'_'.$height.'_'.$entity_id, app()->isProduction() ? 60*60*24*30 : 0 , function () use ($type,$entity_id,$width,$height){
             return $type == 'entity' ?
-                \App\Models\Movie\Entity::query()->findOrFail($entity_id)?->getImage($width,$height):
-                \App\Models\Movie\Movie::query()->findOrFail($entity_id)?->getImage($width,$height);
+                \App\Models\Movie\Entity::query()->findOrFail($entity_id)?->getImage($width,$height,true):
+                \App\Models\Movie\Movie::query()->findOrFail($entity_id)?->getImage($width,$height,true);
         });
         if ( $path and file_exists(storage_path('app/public/' . $path))) {
             return response()->file(storage_path('app/public/' . $path));
         }
         abort(404);
+    }
+    public function searchByTag(Request $request, string $tags): View
+    {
+        $tags = explode('-',$tags);
+        $movies = MovieRepository::searchByTag($tags)->query()->paginate();
+        return view('pages.listMovies', compact(['movies','tags']));
     }
 }

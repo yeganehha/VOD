@@ -43,6 +43,7 @@ Route::get('/{type}-cover/{width}/{height}/{entity_id}' , [MoviesController::cla
 Route::view('/genre/{genre}' , 'layouts.homepage')->name('genre');
 Route::view('/country/{code}/{title?}' , 'layouts.homepage')->name('country');
 Route::view('/year/{year}' , 'layouts.homepage')->name('year');
+Route::get('/list/{tags}' , [MoviesController::class , 'searchByTag'])->name('type.movies');
 Route::view('/list/type/movies' , 'layouts.homepage')->name('type.movies');
 Route::view('/list/type/series' , 'layouts.homepage')->name('type.series');
 Route::view('/list/type/iranian' , 'layouts.homepage')->name('type.iranian');

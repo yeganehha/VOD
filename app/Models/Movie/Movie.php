@@ -108,14 +108,14 @@ class Movie extends Model
         return response()->redirectTo(route("movie.episode" , [$this->entity->slug,$this->episode]));
     }
 
-    public function getImage($width, $height): ?string
+    public function getImage($width, $height , $justPath = false): ?string
     {
         $path = optional(
             $this->covers
                 ->sortBy(fn($img) => abs($img->ratio_type->division() - ((float)$width / (float) $height)))
                 ->filter(fn($img) => $img->path and file_exists(storage_path('app/public/' . $img->path)))
         )->first()?->path;
-        return $path ? asset('storage/'.$path) : $this->entity->getImage($width, $height);
+        return $path ? ($justPath ? $path : asset('storage/'.$path)) : $this->entity->getImage($width, $height  , $justPath);
     }
 
 

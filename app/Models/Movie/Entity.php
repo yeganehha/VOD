@@ -104,13 +104,13 @@ class Entity extends Model
         });
     }
 
-    public function getImage($width, $height): ?string
+    public function getImage($width, $height, $justPath = false): ?string
     {
         $path = optional($this->covers
             ->sortBy(fn($img) => abs($img->ratio_type->division() - ((float)$width / (float) $height)))
             ->filter(fn($img) => $img->path and file_exists(storage_path('app/public/' . $img->path)))
         )->first()?->path ;
-        return $path ? asset('storage/'.$path) : null;
+        return $path ? ($justPath ? $path : asset('storage/'.$path))  : null;
     }
 
     public function ageRange(): \Illuminate\Database\Eloquent\Relations\BelongsTo
