@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static MovieRepository filterByAgeRange(array|string $value)
  * @method static MovieRepository filterByCountry(array|string $values)
  * @method static MovieRepository filterByGenre(array|string $values)
+ * @method static MovieRepository productOfYear(int $year)
  */
 class MovieRepository
 {
@@ -29,6 +30,8 @@ class MovieRepository
     public function activeFilter(): void
     {
         $this->query
+            ->groupBy('entity_id')
+            ->orderByDesc('publish_date')
             ->with(['entity'  , 'entity.covers', 'entity.genres'])
             ->where('publish_date' , '<=', now()->addDays(7))
             ->whereHas('entity' , fn(Builder $builder) => $builder->where('publish_status' , PublishStatus::Publish->value));
@@ -57,6 +60,10 @@ class MovieRepository
             ->wherehas('entity' , fn($builder) => $builder->where('slug' , $entitySlug))
             ->where('episode' , $episode)
             ->where('season' , $season);
+    }
+    private function _productOfYear(int $year): void
+    {
+        $this->query->where('pro_year' , $year);
     }
     private function _searchByTag(array $tags): void
     {
@@ -125,7 +132,7 @@ class MovieRepository
             $this->query->whereHas('entity.countries', fn($builder) => $builder->whereNotIn('code' , $values));
             return;
         }
-        if ((clone $values)->filter(fn($item) => str($item)->contains('_'))->count() > 0){
+        if ((clone $values)->filter(fn($item) => str($item)->contains('_') and strpos($item,'_') == 2)->count() > 0){
             $values = $values->map(fn($item) => explode('_',$item)[0])->toArray();
             $this->query->whereHas('entity.countries', fn($builder) => $builder->whereIn('code' , $values));
         }

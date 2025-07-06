@@ -40,14 +40,14 @@ Route::get('/private-storage/temp/', function (){
 
 Route::view('/' , 'layouts.homepage')->name('home');
 Route::get('/{type}-cover/{width}/{height}/{entity_id}' , [MoviesController::class , 'getImage'])->name('get-cover');
-Route::view('/genre/{genre}' , 'layouts.homepage')->name('genre');
-Route::view('/country/{code}/{title?}' , 'layouts.homepage')->name('country');
-Route::view('/year/{year}' , 'layouts.homepage')->name('year');
+Route::get('/genre/{genre}' , [MoviesController::class , 'searchByGenre'])->name('genre');
+Route::get('/country/{code}/{title?}' , [MoviesController::class , 'searchByCountry'])->name('country');
+Route::get('/year/{year}' , [MoviesController::class , 'searchByYear'])->name('year');
 Route::get('/list/{tags}' , [MoviesController::class , 'searchByTag'])->name('type.movies');
-Route::view('/list/type/movies' , 'layouts.homepage')->name('type.movies');
-Route::view('/list/type/series' , 'layouts.homepage')->name('type.series');
-Route::view('/list/type/iranian' , 'layouts.homepage')->name('type.iranian');
-Route::view('/list/type/foreign' , 'layouts.homepage')->name('type.foreign');
+Route::get('/list/type/movies' , [MoviesController::class , 'justMovies'])->name('type.movies');
+Route::get('/list/type/series' , [MoviesController::class , 'justSeries'])->name('type.series');
+Route::get('/list/type/iranian' , [MoviesController::class , 'justIranian'])->name('type.iranian');
+Route::get('/list/type/foreign' , [MoviesController::class , 'justForeign'])->name('type.foreign');
 Route::get('/m/{uuid}' , fn ($uuid) => Movie::query()->where('id' , $uuid)->firstOrFail()->getLink())->name('movie.short');
 Route::get('/movie/{slug}' , [MoviesController::class , 'singleShow'])->name('movie.show');
 Route::get('/movie/{slug}/episode/{episode}' , [MoviesController::class , 'singleShowEpisode'])->name('movie.episode');

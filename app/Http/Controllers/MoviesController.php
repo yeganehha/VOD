@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\EntityType;
+use App\Models\Asset\Country;
+use App\Models\Movie\Movie;
 use App\Repositories\Movie\MovieRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Constraint\Count;
 
 class MoviesController extends Controller
 {
@@ -33,6 +37,75 @@ class MoviesController extends Controller
     {
         $tags = explode('-',$tags);
         $movies = MovieRepository::searchByTag($tags)->query()->paginate();
-        return view('pages.listMovies', compact(['movies','tags']));
+        return view('pages.searchPage', compact(['movies','tags']));
+    }
+    public function searchByGenre(Request $request, string $genre): View
+    {
+        $tags = [$genre];
+        $slides = MovieRepository::searchByTag($tags)->query()->take(5)->get();
+        $movies = MovieRepository::searchByTag($tags)
+            ->query()->whereNotIn('entity_id' , $slides->pluck('entity_id')
+                ->toArray())
+            ->paginate();
+        return view('pages.categoryListMovies', compact(['movies', 'slides']));
+    }
+    public function searchByCountry(Request $request, string $code, string $title): View
+    {
+        $tags = [$code.'_'.$title];
+        $slides = MovieRepository::searchByTag($tags)->query()->take(5)->get();
+        $movies = MovieRepository::searchByTag($tags)
+            ->query()->whereNotIn('entity_id' , $slides->pluck('entity_id')
+                ->toArray())
+            ->paginate();
+        return view('pages.categoryListMovies', compact(['movies', 'slides']));
+    }
+    public function searchByYear(Request $request, int $year): View
+    {
+        $slides = MovieRepository::productOfYear($year)->query()->take(5)->get();
+        $movies = MovieRepository::productOfYear($year)
+            ->query()->whereNotIn('entity_id' , $slides->pluck('entity_id')
+                ->toArray())
+            ->paginate();
+        return view('pages.categoryListMovies', compact(['movies', 'slides']));
+    }
+    public function justMovies(Request $request): View
+    {
+        $tags = [EntityType::Movie->value];
+        $slides = MovieRepository::searchByTag($tags)->query()->take(5)->get();
+        $movies = MovieRepository::searchByTag($tags)
+            ->query()->whereNotIn('entity_id' , $slides->pluck('entity_id')
+                ->toArray())
+            ->paginate();
+        return view('pages.categoryListMovies', compact(['movies', 'slides']));
+    }
+    public function justSeries(Request $request): View
+    {
+        $tags = [EntityType::Series->value];
+        $slides = MovieRepository::searchByTag($tags)->query()->take(5)->get();
+        $movies = MovieRepository::searchByTag($tags)
+            ->query()->whereNotIn('entity_id' , $slides->pluck('entity_id')
+                ->toArray())
+            ->paginate();
+        return view('pages.categoryListMovies', compact(['movies', 'slides']));
+    }
+    public function justIranian(Request $request): View
+    {
+        $tags = ['IR_iran'];
+        $slides = MovieRepository::searchByTag($tags)->query()->take(5)->get();
+        $movies = MovieRepository::searchByTag($tags)
+            ->query()->whereNotIn('entity_id' , $slides->pluck('entity_id')
+                ->toArray())
+            ->paginate();
+        return view('pages.categoryListMovies', compact(['movies', 'slides']));
+    }
+    public function justForeign(Request $request): View
+    {
+        $tags = Country::query()->whereNot('code', 'IR')->get()->map(fn($item) => $item->code.'_'.str($item->title_en)->slug())->values()->toArray();
+        $slides = MovieRepository::searchByTag($tags)->query()->take(5)->get();
+        $movies = MovieRepository::searchByTag($tags)
+            ->query()->whereNotIn('entity_id' , $slides->pluck('entity_id')
+                ->toArray())
+            ->paginate();
+        return view('pages.categoryListMovies', compact(['movies', 'slides']));
     }
 }
