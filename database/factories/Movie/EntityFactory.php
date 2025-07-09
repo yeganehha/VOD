@@ -7,6 +7,7 @@ use App\Enums\EntityType;
 use App\Enums\Gender;
 use App\Enums\PublishStatus;
 use App\Enums\WeekDay;
+use Database\Fakers\MovieFakerProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -28,27 +29,28 @@ class EntityFactory extends Factory
      */
     public function definition(): array
     {
+        $this->faker->addProvider(new MovieFakerProvider($this->faker));
         return [
-            'title' => fake('fa_IR')->sentence(2),
-            'title_en' => fake('fa_IR')->sentence(2),
-            'slug' => fake('fa_IR')->unique()->slug,
-            'second_title' => fake('fa_IR')->optional()->sentence(2),
-            'second_title_en' => fake('fa_IR')->optional()->sentence(2),
-            'pre_title' => fake('fa_IR')->optional()->sentence(2),
-            'pre_title_en' => fake('fa_IR')->optional()->sentence(2),
-            'type' => fake('fa_IR')->randomElement(EntityType::cases()),
-            'publish_status' => fake('fa_IR')->randomElement(PublishStatus::cases()),
-            'weekly_release_schedule_day' => fake('fa_IR')->randomElement(WeekDay::cases()),
-            'weekly_release_schedule_hour' => fake('fa_IR')->time('H:i:s'),
-            'about_movie' => fake('fa_IR')->optional()->paragraph(3),
-            'about_movie_en' => fake('fa_IR')->optional()->paragraph(3),
+            'title' => $this->faker->movieTitle(),
+            'title_en' => fake('en_US')->sentence(2),
+            'slug' => fake('en_US')->unique()->slug,
+            'second_title' => $this->faker->secondTitle(),
+            'second_title_en' => fake('en_US')->optional()->sentence(2),
+            'pre_title' => $this->faker->moviePreTitle(),
+            'pre_title_en' => fake('en_US')->optional()->sentence(2),
+            'type' => fake()->randomElement(EntityType::cases()),
+            'publish_status' => fake()->randomElement(PublishStatus::cases()),
+            'weekly_release_schedule_day' => fake()->randomElement(WeekDay::cases()),
+            'weekly_release_schedule_hour' => fake()->time('H:i:s'),
+            'about_movie' => $this->faker->movieSummary(),
+            'about_movie_en' => fake('en_US')->optional()->paragraph(3),
             'age_range_id' => null, // تنظیم در Seeder یا با relation
-            'main_audio' => fake('fa_IR')->randomElement(Audio::cases()),
-            'exclusive' => fake('fa_IR')->boolean(),
-            'is_free_movie' => fake('fa_IR')->boolean(),
-            'logo' => fake('fa_IR')->optional()->imageUrl(),
-            'movie_logo' => fake('fa_IR')->optional()->imageUrl(),
-            'pro_year' => fake('fa_IR')->numberBetween(1990, now()->year),
+            'main_audio' => fake()->randomElement(Audio::cases()),
+            'exclusive' => fake()->boolean(),
+            'is_free_movie' => fake()->boolean(),
+            'logo' => fake()->optional()->imageUrl(),
+            'movie_logo' => fake()->optional()->imageUrl(),
+            'pro_year' => fake()->numberBetween(1990, now()->year),
         ];
     }
 

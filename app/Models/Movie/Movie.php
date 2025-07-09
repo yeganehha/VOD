@@ -102,10 +102,10 @@ class Movie extends Model
         if ( $short )
             return route('movie.short' , $this->id);
         if ( $this->entity->type == \App\Enums\EntityType::Movie )
-            return response()->redirectTo(route("movie.show" , $this->entity->slug));
+            return route("movie.show" , $this->entity->slug);
         if ( $this->entity->type == \App\Enums\EntityType::MultiSeasonSeries )
-            return response()->redirectTo(route("movie.series" , [$this->entity->slug, $this->season, $this->episode]));
-        return response()->redirectTo(route("movie.episode" , [$this->entity->slug,$this->episode]));
+            return route("movie.series" , [$this->entity->slug, $this->season, $this->episode]);
+        return route("movie.episode" , [$this->entity->slug,$this->episode]);
     }
 
     public function getImage($width, $height , $justPath = false): ?string

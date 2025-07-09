@@ -7,6 +7,7 @@ use App\Enums\PublishStatus;
 use App\Models\Movie\Movie;
 use App\Models\User\Profile;
 use App\Models\User\User;
+use Database\Fakers\MovieFakerProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -28,11 +29,12 @@ class CommentFactory extends Factory
      */
     public function definition(): array
     {
+        $this->faker->addProvider(new MovieFakerProvider($this->faker));
         return [
-            'movie_id' => fake()->randomElement(Movie::all()->pluck('id')->toArray()),
+            'movie_id' => $this->faker->randomElement(Movie::all()->pluck('id')->toArray()),
             'parent_id' => null,
-            'profile_id' => fake()->randomElement(Profile::all()->pluck('id')->toArray()),
-            'comment' => fake('fa_IR')->sentences(5,true),
+            'profile_id' => $this->faker->randomElement(Profile::all()->pluck('id')->toArray()),
+            'comment' => $this->faker->movieComment(),
             'publish_status' => PublishStatus::Publish->value,
             'is_spoiler' => rand(0, 1),
         ];

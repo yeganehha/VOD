@@ -9,6 +9,7 @@ use App\Models\Movie\Entity;
 use App\Models\Movie\EntityCover;
 use App\Models\Movie\Movie;
 use App\Models\Movie\MovieCover;
+use Database\Fakers\MovieFakerProvider;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -33,6 +34,8 @@ class MovieSeeder extends Seeder
     }
     public function run(): void
     {
+        $faker = fake();
+        $faker->addProvider(new MovieFakerProvider($faker));
         $entities = Entity::all();
         foreach ( glob(public_path('assets/theme/images/*.*')) as $filename ) {
             list($width, $height, $type, $attr) = getimagesize($filename);
@@ -120,7 +123,7 @@ class MovieSeeder extends Seeder
                         'main_audio' => $entity->main_audio,
                         'title' => $entity->title. " - ایپزود " . ($i + 1),
                         'title_en' => $entity->title_en. " - Episode " . ($i + 1),
-                        'description' => fake('fa_IR')->paragraph ,
+                        'description' => $faker->movieSummary() ,
                         'description_en' => fake('en')->paragraph ,
                         'dubbed' => (bool) rand(0, 1),
                         'duration' => rand(20, 120),
@@ -150,7 +153,7 @@ class MovieSeeder extends Seeder
                             'main_audio' => $entity->main_audio,
                             'title' => $entity->title. " - ا:" . ($i + 1) . " - ف:" . ($j + 1),
                             'title_en' => $entity->title_en. " - Episode " . ($i + 1),
-                            'description' => $entity->about_movie . " - اپیزود " . ($i + 1) . " - فصل " . ($j + 1) ,
+                            'description' => $faker->movieSummary() . " - اپیزود " . ($i + 1) . " - فصل " . ($j + 1) ,
                             'description_en' => $entity->about_movie_en . " - Episode " . ($i + 1). " - Season " . ($j + 1) ,
                             'dubbed' => (bool)rand(0, 1),
                             'duration' => rand(20, 120),

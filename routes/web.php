@@ -48,7 +48,7 @@ Route::get('/list/type/movies' , [MoviesController::class , 'justMovies'])->name
 Route::get('/list/type/series' , [MoviesController::class , 'justSeries'])->name('type.series');
 Route::get('/list/type/iranian' , [MoviesController::class , 'justIranian'])->name('type.iranian');
 Route::get('/list/type/foreign' , [MoviesController::class , 'justForeign'])->name('type.foreign');
-Route::get('/m/{uuid}' , fn ($uuid) => Movie::query()->where('id' , $uuid)->firstOrFail()->getLink())->name('movie.short');
+Route::get('/m/{uuid}' , fn ($uuid) => redirect(Movie::query()->where('id' , $uuid)->firstOrFail()->getLink()))->name('movie.short');
 Route::get('/movie/{slug}' , [MoviesController::class , 'singleShow'])->name('movie.show');
 Route::get('/movie/{slug}/episode/{episode}' , [MoviesController::class , 'singleShowEpisode'])->name('movie.episode');
 Route::get('/movie/{slug}/season/{season}/episode/{episode}' , [MoviesController::class , 'singleShow'])->name('movie.series');

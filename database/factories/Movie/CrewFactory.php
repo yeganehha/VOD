@@ -3,6 +3,7 @@
 namespace Database\Factories\Movie;
 
 use App\Enums\Gender;
+use Database\Fakers\MovieFakerProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -24,12 +25,13 @@ class CrewFactory extends Factory
      */
     public function definition(): array
     {
+        $this->faker->addProvider(new MovieFakerProvider($this->faker));
         return [
-            'name' => fake()->name(),
-            'name_en' => fake('en')->name(),
+            'name' => $this->faker->movieActor(),
+            'name_en' => $this->faker->name(),
             'slug' => fake('en')->slug(),
-            'biography' => fake('fa')->paragraphs(asText: true),
-            'biography_en' => fake('en')->paragraphs(asText: true),
+            'biography' => $this->faker->actorBiography(),
+            'biography_en' => $this->faker->paragraphs(asText: true),
             'birthday' => fake()->date(),
             'avatar' => fake()->randomElement(['Avatar/comment01.jpeg','Avatar/comment02.jpeg','Avatar/comment03.jpeg','Avatar/comment04.jpeg','Avatar/comment05.jpeg']),
             'birth_location_id' => fake()->randomNumber(1,250),
