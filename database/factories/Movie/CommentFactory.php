@@ -32,7 +32,7 @@ class CommentFactory extends Factory
             'movie_id' => fake()->randomElement(Movie::all()->pluck('id')->toArray()),
             'parent_id' => null,
             'profile_id' => fake()->randomElement(Profile::all()->pluck('id')->toArray()),
-            'comment' => fake()->sentences(5,true),
+            'comment' => fake('fa_IR')->sentences(5,true),
             'publish_status' => PublishStatus::Publish->value,
             'is_spoiler' => rand(0, 1),
         ];
