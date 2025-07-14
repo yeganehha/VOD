@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static MovieRepository series();
  * @method static MovieRepository movie();
  * @method static MovieRepository singleShow($entitySlug , $episode, $season);
- * @method static MovieRepository searchByTag(array $tags);
+ * @method static MovieRepository searchByTag(array $tags,string|null $queryString = null);
  * @method static MovieRepository filterByType(array|EntityType $value)
  * @method static MovieRepository filterByLanguage(array|string $values)
  * @method static MovieRepository filterByAgeRange(array|string $value)
@@ -65,7 +65,7 @@ class MovieRepository
     {
         $this->query->where('pro_year' , $year);
     }
-    private function _searchByTag(array $tags): void
+    private function _searchByTag(array $tags , ?string $queryString = null): void
     {
         $this->query = null;
         $this->query = app($this->modelClass)::query();
@@ -77,6 +77,8 @@ class MovieRepository
                 $this->$method($tags);
             }
         }
+        if ( $queryString )
+            $this->query->whereLike('title' , '%'.$queryString.'%');
     }
     private function _filterByType(array|EntityType $value): void
     {
@@ -146,7 +148,8 @@ class MovieRepository
                 str($item)->contains('_') or
                 str($item)->startsWith('age_between_') or
                 in_array($item,['is_dubbed', 'fa_sub', 'is_multilingual']) or
-                EntityType::tryFrom($item) != null
+                EntityType::tryFrom($item) != null or
+                empty($item)
             ));
         if ($values->count() > 0)
         {

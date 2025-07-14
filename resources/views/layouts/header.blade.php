@@ -14,9 +14,9 @@
                         </div>
 
                         <div class="search-area">
-                            <form action="#">
+                            <form action="{{ route('search') }}" method="GET">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="کلمه را وارد کنید...">
+                                    <input type="text" name="q" class="form-control" placeholder="کلمه را وارد کنید...">
                                     <button type="submit" class="search-icon-btn"><i
                                             class="icon-search"></i></button>
                                 </div>
@@ -93,9 +93,9 @@
                             </div>
 
                             <div class="search-area">
-                                <form action="#">
+                                <form action="{{ route('search') }}" method="GET">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="کلمه را وارد نمایید...">
+                                        <input type="text" name="q" class="form-control" placeholder="کلمه را وارد نمایید...">
                                         <button type="submit" class="search-icon-btn"><i
                                                 class="icon-search"></i></button>
                                     </div>
