@@ -153,7 +153,7 @@ class EntityResource extends Resource
     {
         return $infolist
             ->schema([
-                Grid::make(2)->schema([
+                Grid::make(4)->schema([
                     TextEntry::make('title')->label('عنوان'),
                     TextEntry::make('title_en')->label('عنوان (انگلیسی)'),
                     TextEntry::make('second_title')->label('عنوان دوم'),
@@ -206,17 +206,7 @@ class EntityResource extends Resource
                         ->boolean(),
                 ]),
 
-                Group::make()->schema([
-                    TextEntry::make('about_movie')->label('درباره فیلم')->markdown(),
-                    TextEntry::make('about_movie_en')->label('درباره فیلم (انگلیسی)')->markdown(),
-                ])->columns(2),
-
-                Grid::make(2)->schema([
-                    ImageEntry::make('logo')->label('لوگوی مجموعه'),
-                    ImageEntry::make('movie_logo')->label('لوگوی فیلم'),
-                ]),
-
-                Grid::make(2)->schema([
+                Grid::make(4)->schema([
                     TextEntry::make('genres')
                         ->label('ژانرها')
                         ->formatStateUsing(fn(Entity $entity) => $entity->genres?->pluck('title')->join(', ') ?? '-'),
@@ -224,13 +214,20 @@ class EntityResource extends Resource
                     TextEntry::make('countries')
                         ->label('کشورها')
                         ->formatStateUsing(fn(Entity $entity) => $entity->countries?->pluck('name')->join(', ') ?? '-'),
-                ]),
-
-
-                Grid::make(2)->schema([
                     TextEntry::make('created_at')->label('تاریخ ایجاد')->date('Y/m/d - H:i'),
                     TextEntry::make('updated_at')->label('آخرین ویرایش')->date('Y/m/d - H:i'),
                 ]),
+
+                Group::make()->schema([
+                    TextEntry::make('about_movie')->label('درباره فیلم')->markdown(),
+                    TextEntry::make('about_movie_en')->label('درباره فیلم (انگلیسی)')->markdown(),
+                ])->columnSpanFull()->columns(2),
+
+                Grid::make(2)->schema([
+                    ImageEntry::make('logo')->label('لوگوی مجموعه'),
+                    ImageEntry::make('movie_logo')->label('لوگوی فیلم'),
+                ])->columnSpanFull(),
+
             ]);
     }
 

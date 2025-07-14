@@ -17,7 +17,7 @@ use Illuminate\Support\Collection;
  * @property int $parent_id
  * @property Comment $parent
  * @property int $profile_id
- * @property User $profile
+ * @property Profile $profile
  * @property string $comment
  * @property PublishStatus $publish_status
  * @property Collection<Comment> $chields

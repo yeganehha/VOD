@@ -108,6 +108,24 @@ class MoviesRelationManager extends RelationManager
                 Forms\Components\Toggle::make('exclusive')
                     ->label('اختصاصی'),
 
+                Forms\Components\Repeater::make('crew')
+                    ->label('تیم فنی')
+                    ->relationship('crew')
+                    ->columnSpanFull()
+                    ->schema([
+                        Forms\Components\Select::make('crew_id')
+                            ->label('شخص')
+                            ->relationship(name: 'crew', titleAttribute: 'name')
+                            ->searchable(['name', 'name_en'])
+                            ->required(),
+                        Forms\Components\Select::make('position_id')
+                            ->label('موقعیت')
+                            ->relationship(name: 'position', titleAttribute: 'title')
+                            ->searchable(['title'])
+                            ->required(),
+                    ])
+                    ->columns(2)
+
             ]);
     }
 
