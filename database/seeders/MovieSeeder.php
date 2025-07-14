@@ -21,9 +21,8 @@ class MovieSeeder extends Seeder
     private function makeMovieCovers($movieId): void
     {
         foreach ( [RatioType::R_21_9 , RatioType::R_16_9, RatioType::R_1_1, RatioType::R_9_16, RatioType::R_3_4, RatioType::R_3_5  ] as $case ){
-            $source = collect(optional($this->images)[$case->value] ?? [])->random();
-            $destination = 'movie-covers/'. now()->format('Y/m/d').'/'.  Str::uuid() .'.' . pathinfo($source, PATHINFO_EXTENSION) ;
-            copy($source , storage_path('app/public/'. $destination)) ;
+            $rand_keys = array_rand($this->images[$case->value]);
+            $destination = $this->images[$case->value][$rand_keys] ;
             MovieCover::query()->create([
                 'movie_id' => $movieId ,
                 'ratio_type' => $case->value ,
@@ -34,6 +33,14 @@ class MovieSeeder extends Seeder
     }
     public function run(): void
     {
+        Storage::makeDirectory('public/entity-covers/');
+        Storage::makeDirectory('public/entity-covers/' . now()->format('Y'));
+        Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m'));
+        Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m/d'));
+        Storage::makeDirectory('public/movie-covers/');
+        Storage::makeDirectory('public/movie-covers/' . now()->format('Y'));
+        Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m'));
+        Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m/d'));
         $faker = fake();
         $faker->addProvider(new MovieFakerProvider($faker));
         $entities = Entity::all();
@@ -50,7 +57,9 @@ class MovieSeeder extends Seeder
                     $selectedRatioCase = $case;
                 }
             }
-            $this->images[$selectedRatioCase->value][] = $filename;
+            $destination = 'movie-covers/'. now()->format('Y/m/d').'/'.  Str::uuid() .'.' . pathinfo($filename, PATHINFO_EXTENSION) ;
+            copy($filename , storage_path('app/public/'. $destination)) ;
+            $this->images[$selectedRatioCase->value][] = $destination;
         }
         foreach ( RatioType::cases() as $case ){
             $selectedRatio = PHP_INT_MAX ;
@@ -65,23 +74,14 @@ class MovieSeeder extends Seeder
                     $selectedRatioImage = $filename;
                 }
             }
+            $destination = 'movie-covers/'. now()->format('Y/m/d').'/'.  Str::uuid() .'.' . pathinfo($selectedRatioImage, PATHINFO_EXTENSION) ;
+            copy($selectedRatioImage , storage_path('app/public/'. $destination)) ;
             $this->images[$case->value][] = $selectedRatioImage;
         }
-        Storage::makeDirectory('public/entity-covers/');
-        Storage::makeDirectory('public/entity-covers/' . now()->format('Y'));
-        Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m'));
-        Storage::makeDirectory('public/entity-covers/' . now()->format('Y/m/d'));
-        Storage::makeDirectory('public/movie-covers/');
-        Storage::makeDirectory('public/movie-covers/' . now()->format('Y'));
-        Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m'));
-        Storage::makeDirectory('public/movie-covers/' . now()->format('Y/m/d'));
         foreach ($entities as $entity) {
             foreach ( RatioType::cases() as $case ){
-                if ( count(optional($this->images)[$case->value] ?? [] ) == 0  )
-                    dd($case->value);
-                $source = collect(optional($this->images)[$case->value] ?? [])->random();
-                $destination = 'entity-covers/'. now()->format('Y/m/d').'/'.  Str::uuid() .'.' . pathinfo($source, PATHINFO_EXTENSION) ;
-                copy($source , storage_path('app/public/'. $destination)) ;
+                $rand_keys = array_rand($this->images[$case->value]);
+                $destination = $this->images[$case->value][$rand_keys] ;
                 EntityCover::query()->create([
                     'entity_id' => $entity->id ,
                     'ratio_type' => $case->value ,
