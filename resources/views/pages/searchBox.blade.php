@@ -32,7 +32,7 @@
                                 <div class="filter-select">
                                     <select class="searchBoxSelect select" data-js-placeholder="کشور سازنده:" multiple>
                                         @foreach(\App\Repositories\Movie\CountryRepository::getAll(14) as $country)
-                                            <option @selected(in_array($country->code.'_'.\Illuminate\Support\Str::slug($country->title_en) , $values)) value="{{ $country->code .'_'.\Illuminate\Support\Str::slug($country->title_en) }}">{{ $country->title }}</option>
+                                            <option @selected(in_array($country->code.'_'.str(\Illuminate\Support\Str::slug($country->title_en))->camel() , $values)) value="{{ $country->code .'_'.str(\Illuminate\Support\Str::slug($country->title_en))->camel() }}">{{ $country->title }}</option>
                                         @endforeach
                                         <option @selected(in_array('other_country' , $values)) value="other_country">دیگر کشورها</option>
                                     </select>
@@ -40,7 +40,7 @@
                                 <div class="filter-select">
                                     <select class="searchBoxSelect select" data-js-placeholder="ژانر:" multiple>
                                         @foreach(\App\Repositories\Movie\GenreRepository::init()->getAll() as $genre)
-                                            <option @selected(in_array($genre->slug , $values)) value="{{ $genre->slug }}">{{ $genre->title }}</option>
+                                            <option @selected(in_array(str($genre->slug)->camel() , $values)) value="{{ str($genre->slug)->camel() }}">{{ $genre->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>

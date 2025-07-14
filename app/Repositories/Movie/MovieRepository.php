@@ -153,7 +153,15 @@ class MovieRepository
             ));
         if ($values->count() > 0)
         {
-            $this->query->whereHas('entity.genres', fn($builder) => $builder->whereIn('slug' , $values->values()));
+            $this->query->whereHas('entity.genres', fn($builder) => $builder->whereIn('slug' , $values->map(
+                fn($item) => strtolower(
+                    preg_replace(
+                        '/(?>[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|[^A-Za-z])|[^A-Za-z]+)\K(?!$)/',
+                        '-',
+                        $item
+                    )
+                )
+            )->values()));
         }
     }
 }
