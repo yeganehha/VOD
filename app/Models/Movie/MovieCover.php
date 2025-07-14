@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 /**
  * @property string $movie_id
  * @property string $path
- * @property Entity $entity
+ * @property Entity $movie
  * @property RatioType $ratio_type
  * @property CoverType $cover_type
  */
@@ -48,7 +48,7 @@ class MovieCover extends Model
     }
 
 
-    public function entity(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function movie(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Movie::class);
     }

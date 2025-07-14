@@ -22,7 +22,7 @@
                             <img style="width: 100%;aspect-ratio: 3/4" src="{{ $movie->getImage(3,4) }}"  alt="{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}">
                         </div>
                     </div>
-                    <div class="col-md-8 col-lg-6 border-end">
+                    <div class="col-md-8 col-lg-9 border-end1">
                         <div class="movie-info">
                             <h4 class="movie-name d-flex justify-items-center">
                                 {{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}
@@ -110,18 +110,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7 col-lg-3">
-                        <div class="movie-download">
-                            <h5>دانلود:</h5>
-                            <a href="#" class="theme-btn"><span
-                                    class="fas fa-arrow-down-to-arc"></span>دانلود: 576p</a>
-                            <a href="#" class="theme-btn"><span
-                                    class="fas fa-arrow-down-to-arc"></span>دانلود: 720p</a>
-                            <a href="#" class="theme-btn"><span
-                                    class="fas fa-arrow-down-to-arc"></span>دانلود: 1080p</a>
-                        </div>
-                    </div>
-                    <div class="col-12">
+{{--                    <div class="col-md-7 col-lg-3">--}}
+{{--                        <div class="movie-download">--}}
+{{--                            <h5>دانلود:</h5>--}}
+{{--                            <a href="#" class="theme-btn"><span--}}
+{{--                                    class="fas fa-arrow-down-to-arc"></span>دانلود: 576p</a>--}}
+{{--                            <a href="#" class="theme-btn"><span--}}
+{{--                                    class="fas fa-arrow-down-to-arc"></span>دانلود: 720p</a>--}}
+{{--                            <a href="#" class="theme-btn"><span--}}
+{{--                                    class="fas fa-arrow-down-to-arc"></span>دانلود: 1080p</a>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+                    <div class="col-12 mt-3">
                         <div class="testimonial-slider owl-carousel owl-theme">
                             @foreach($movie->crew as $crew)
                             <div class="testimonial-item">
