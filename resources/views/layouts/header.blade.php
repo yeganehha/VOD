@@ -109,7 +109,7 @@
                                     class="icon-moon-2"></i></button>
                         </div>
                         <div class="nav-right-btn">
-                            <a href="#" class="theme-btn"><i class="far fa-sign-in"></i> ثبت نام</a>
+                            <a href="{{ route('login') }}" class="theme-btn"><i class="far fa-sign-in"></i> ناحیه کاربری</a>
                         </div>
                     </div>
                 </div>

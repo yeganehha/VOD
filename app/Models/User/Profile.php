@@ -3,9 +3,12 @@
 namespace App\Models\User;
 
 use App\Models\Asset\AgeRange;
+use App\Models\Movie\Movie;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * @property int $id
@@ -16,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property int $age_range_id
  * @property AgeRange $ageRange
  * @property boolean $main_user
+ * @property Collection<Movie> $favorites
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -48,5 +52,10 @@ class Profile extends Model
     public function avatarLink(): string
     {
         return ( ! empty($this->avatar)) ? asset('storage/'. $this->avatar) : asset('assets/images/avatar.png');
+    }
+
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Movie::class,'favorites');
     }
 }

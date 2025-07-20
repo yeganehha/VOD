@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Models\Asset\Setting;
+use App\Models\User\Profile;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Number;
 
 class Helper
@@ -230,5 +233,8 @@ class Helper
         }
 
         return Number::format($number / 1000000, 2) . ' مِیلیون ';
+    }
+    public static function formatPhone(string $phone): string {
+        return '0' . substr(Helper::convertToEnglishNumbers  ($phone), -10) ;
     }
 }

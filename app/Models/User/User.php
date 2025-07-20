@@ -3,10 +3,13 @@
 namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as AuthenticateAble;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 /**
  * @property int $id
@@ -43,8 +46,29 @@ class User extends AuthenticateAble
         'password' => 'hashed',
     ];
 
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::created(function (Model $model) {
+            /** @var self $model */
+            $model->profiles()->create([
+                'name' => 'خودم',
+                'age_range_id' => 6,
+                'main_user' => true,
+            ]);
+        });
+    }
+
     public function profiles(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Profile::class);
+    }
+
+    public function currentProfile() : Profile
+    {
+        return Request::cookie('currentProfile') == null ?
+            $this->profiles()->where('main_user' , 1)->firstOrFail() :
+            $this->profiles()->findOrFail(Request::cookie('currentProfile')) ;
     }
 }

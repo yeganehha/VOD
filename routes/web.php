@@ -52,5 +52,9 @@ Route::get('/m/{uuid}' , fn ($uuid) => redirect(Movie::query()->where('id' , $uu
 Route::get('/movie/{slug}' , [MoviesController::class , 'singleShow'])->name('movie.show');
 Route::get('/movie/{slug}/episode/{episode}' , [MoviesController::class , 'singleShowEpisode'])->name('movie.episode');
 Route::get('/movie/{slug}/season/{season}/episode/{episode}' , [MoviesController::class , 'singleShow'])->name('movie.series');
-Route::view('/login' , 'layouts.homepage')->name('login');
-Route::view('/profile' , 'layouts.homepage')->name('profile');
+
+
+Route::get('/login' , [\App\Http\Controllers\ProfileController::class,'loginView'])->name('login');
+Route::post('/login' , [\App\Http\Controllers\ProfileController::class,'login'])->name('loginProcess');
+Route::get('/logout' , [\App\Http\Controllers\ProfileController::class,'logout'])->name('logout')->middleware('auth:web');
+Route::view('/profile' , 'pages.Auth.profile')->name('profile')->middleware('auth:web');
