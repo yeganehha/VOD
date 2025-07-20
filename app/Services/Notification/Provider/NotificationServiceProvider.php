@@ -9,6 +9,6 @@ class NotificationServiceProvider extends ServiceProvider
 
     public function boot():void
     {
-        $this->mergeConfigFrom(app_path('Services/Notification/config/notification.php') , 'notification');
+        $this->mergeConfigFrom(app_path('Services/Notification/Config/notification.php') , 'notification');
     }
 }
