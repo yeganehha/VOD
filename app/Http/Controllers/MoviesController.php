@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\EntityType;
+use App\Enums\PublishStatus;
 use App\Models\Asset\Country;
+use App\Models\Movie\Comment;
 use App\Models\Movie\Movie;
 use App\Models\User\User;
 use App\Repositories\Movie\MovieRepository;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MoviesController extends Controller
@@ -15,7 +18,8 @@ class MoviesController extends Controller
     public function singleShow($entitySlug  , $season = 1, $episode = 1): View
     {
         $movie = MovieRepository::singleShow($entitySlug , $episode, $season)->query()->firstOrFail();
-        return view('pages.singleMovie', compact(['movie']));
+        $comments = MovieRepository::movieComment($movie);
+        return view('pages.singleMovie', compact(['movie' , 'comments']));
     }
     public function singleShowEpisode($entitySlug  ,$episode): View
     {
@@ -127,5 +131,37 @@ class MoviesController extends Controller
         ]);
     }
 
+    public function loadMoreComment(Request $request): JsonResponse
+    {
+        $comments = MovieRepository::movieComment($request->input('movie_id'),$request->input('page', 1));
+        return response()->json([
+            'html' => view('Component.comment', compact('comments'))->render(),
+            'hasMore' => $comments->hasMorePages(),
+            'nextPage' => $comments->currentPage() + 1,
+        ]);
+    }
 
+    public function storeComment(Request $request): JsonResponse
+    {
+        $request->validate([
+            'body' => 'required|string|max:1000',
+            'movie_id' => 'required|exists:movies,id',
+        ], [
+            'body.required' => 'متن نظر شما الزامی است.',
+            'body.string'   => 'متن نظر شما باید یک رشته باشد.',
+            'body.max'      => 'متن نظر شما نباید بیشتر از ۱۰۰۰ کاراکتر باشد.',
+            'movie_id.required' => 'شناسه فیلم الزامی است.',
+            'movie_id.exists'   => 'فیلم انتخاب شده معتبر نیست.',
+        ]);
+        Comment::query()->create([
+            'profile_id' => auth()->user()->currentProfile()->id,
+            'movie_id' => $request->get('movie_id'),
+            'comment' => $request->get('body'),
+            'publish_status' => PublishStatus::Pending->value,
+        ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'نظر شما با موفقیت ثبت شد و پس از تایید پشتیبانان نمایش داده می شود.',
+        ]);
+    }
 }

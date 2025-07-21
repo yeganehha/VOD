@@ -20,7 +20,8 @@ use Illuminate\Support\Collection;
  * @property Profile $profile
  * @property string $comment
  * @property PublishStatus $publish_status
- * @property Collection<Comment> $chields
+ * @property Collection<Comment> $child
+ * @property Collection<Comment> $activeChild
  * @property boolean $is_spoiler
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -55,9 +56,16 @@ class Comment extends Model
         return $this->belongsTo(Comment::class);
     }
 
-    public function chields(): \Illuminate\Database\Eloquent\Relations\hasMany
+    public function child(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
         return $this->hasMany(Comment::class , 'parent_id');
+    }
+
+    public function activeChild(): \Illuminate\Database\Eloquent\Relations\hasMany
+    {
+        return $this->hasMany(Comment::class , 'parent_id')
+            ->where('publish_status' , PublishStatus::Publish->value)
+            ->orderByDesc('created_at');
     }
 
     public function profile(): \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -2476,18 +2476,20 @@ label {
   display: none;
 }
 
-.movie-single .movie-action-right a{
-  width: 35px;
-  height: 35px;
-  line-height: 33px;
-  text-align: center;
-  color: var(--body-text-color);
-  border: 1px solid var(--border-info-color);
-  border-radius: 50px;
-  margin: 3px;
+.movie-single .movie-action-right .action-item{
+    width: 35px;
+    height: 35px;
+    line-height: 39px;
+    text-align: center;
+    color: var(--body-text-color);
+    border: 1px solid var(--border-info-color);
+    border-radius: 50px;
+    margin: 3px;
+    cursor: pointer;
+    display: inline-block;
 }
 
-.movie-single .movie-action-right a:hover{
+.movie-single .movie-action-right .action-item:hover{
   color: var(--theme-color);
   border-color: var(--theme-color);
 }

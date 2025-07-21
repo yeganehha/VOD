@@ -52,6 +52,7 @@ Route::get('/m/{uuid}' , fn ($uuid) => redirect(Movie::query()->where('id' , $uu
 Route::get('/movie/{slug}' , [MoviesController::class , 'singleShow'])->name('movie.show');
 Route::get('/movie/{slug}/episode/{episode}' , [MoviesController::class , 'singleShowEpisode'])->name('movie.episode');
 Route::get('/movie/{slug}/season/{season}/episode/{episode}' , [MoviesController::class , 'singleShow'])->name('movie.series');
+Route::get('/comments/load-more', [MoviesController::class, 'loadMoreComment'])->name('comments.loadMore');
 
 
 Route::get('/login' , [\App\Http\Controllers\ProfileController::class,'loginView'])->name('login');
@@ -59,3 +60,4 @@ Route::post('/login' , [\App\Http\Controllers\ProfileController::class,'login'])
 Route::get('/logout' , [\App\Http\Controllers\ProfileController::class,'logout'])->name('logout')->middleware('auth:web');
 Route::view('/profile' , 'pages.Auth.profile')->name('profile')->middleware('auth:web');
 Route::post('/movies/{movie}/toggle-favorite', [MoviesController::class, 'toggleFavorite'])->name('movies.toggleFavorite');
+Route::post('/comments/store', [MoviesController::class, 'storeComment'])->name('comments.store')->middleware('auth:web');

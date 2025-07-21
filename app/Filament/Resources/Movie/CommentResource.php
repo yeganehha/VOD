@@ -72,7 +72,7 @@ class CommentResource extends Resource implements HasShieldPermissions
                     ->icon('heroicon-s-link')
                     ->url(fn (Comment $record) => ViewUser::getUrl(['record' => $record->profile->user_id]))
                     ->openUrlInNewTab()
-                    ->formatStateUsing(fn (Comment $record) => $record->profile->user->name ),
+                    ->formatStateUsing(fn (Comment $record) => $record->profile->user->phone ),
 
 //                TextEntry::make('controller_id')
 //                    ->inlineLabel()
@@ -117,21 +117,21 @@ class CommentResource extends Resource implements HasShieldPermissions
                 Tables\Actions\ViewAction::make('view')
                     ->extraModalFooterActions([
                         Tables\Actions\Action::make('approve_document')
-                            ->icon('iconic-check')
-                            ->hidden(! filament()->auth()->user()->can('update_comment'))
+                            ->icon('heroicon-m-check-circle')
+                            ->hidden(! filament()->auth()->user()->can('update_movie::comment'))
                             ->visible(fn (Comment $record) => in_array($record->publish_status,[PublishStatus::Pending,PublishStatus::Reject]))
                             ->label('تایید')
                             ->color('success')
                             ->action(function($record){
-                                /** @var Document $record */
+                                /** @var Comment $record */
                                 $record->update([
                                     'publish_status' => PublishStatus::Publish,
                                     'controller_id' => filament()->auth()->user()->id
                                 ]);
                             }),
                         Tables\Actions\Action::make('reject_document')
-                            ->icon('maki-cross')
-                            ->hidden(! filament()->auth()->user()->can('update_comment'))
+                            ->icon('heroicon-m-x-circle')
+                            ->hidden(! filament()->auth()->user()->can('update_movie::comment'))
                             ->visible(fn (Comment $record) => in_array($record->publish_status,[PublishStatus::Pending,PublishStatus::Publish]))
                             ->label('رد نظر')
                             ->color('danger')

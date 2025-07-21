@@ -385,3 +385,106 @@ function toggleFavorite(movieID) {
         }
     });
 }
+
+function shareMovie(movieUrl, movieTitle) {
+    if (navigator.share) {
+        navigator.share({
+            title: movieTitle,
+            text: 'این فیلم رو ببین!',
+            url: movieUrl,
+        })
+            .then(() => {
+            })
+            .catch((error) => {
+                console.log('Error sharing:', error);
+            });
+    } else {
+        copyToClipboard(movieUrl);
+        alert('لینک فیلم کپی شد!');
+    }
+}
+
+// تابع کمکی برای کپی به کلیپ‌بورد
+function copyToClipboard(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+    } else {
+        var tempInput = document.createElement("input");
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+    }
+}
+
+$(document).on('click', '#load-more-comments', function() {
+    var button = $(this);
+    var page = button.data('page');
+    var movieId = button.data('movie');
+
+    button.prop('disabled', true).html('در حال بارگذاری...');
+
+    $.ajax({
+        url: '/comments/load-more',
+        type: 'GET',
+        data: {
+            movie_id: movieId,
+            page: page
+        },
+        success: function(response) {
+            $('.comment-list').append(response.html);
+
+            if (response.hasMore) {
+                button.data('page', response.nextPage);
+                button.prop('disabled', false).html('نمایش بیشتر <span class="fas fa-rotate-left"></span>');
+            } else {
+                button.remove();
+            }
+        },
+        error: function() {
+            button.prop('disabled', false).html('نمایش بیشتر <span class="fas fa-rotate-left"></span>');
+        }
+    });
+});
+
+
+$('#comment-form').on('submit', function(e) {
+    e.preventDefault();
+
+    var form = $(this);
+    var url = form.attr('action');
+    var data = form.serialize();
+
+    form.find('button[type=submit]').prop('disabled', true).text('در حال ارسال...');
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: data,
+        success: function(response) {
+            if (response.status === 'success') {
+                // ریست کردن فرم
+                form[0].reset();
+                $('#comment-form-message').html('<div class="alert alert-success">' + response.message + '</div>');
+            }
+            form.find('button[type=submit]').prop('disabled', false).html('دیدگاه پست <i class="far fa-paper-plane"></i>');
+        },
+        error: function(xhr) {
+            form.find('button[type=submit]').prop('disabled', false).html('دیدگاه پست <i class="far fa-paper-plane"></i>');
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                let errorMsg = '';
+                for (let key in errors) {
+                    errorMsg += errors[key][0] + '<br>';
+                }
+                $('#comment-form-message').html('<div class="alert alert-danger">' + errorMsg + '</div>');
+            } else if (xhr.status === 401) {
+                $('#comment-form-message').html('<div class="alert alert-danger">برای ارسال نظر باید وارد شوید!</div>');
+            } else {
+                $('#comment-form-message').html('<div class="alert alert-danger">خطایی رخ داد!</div>');
+            }
+        }
+    });
+});
+

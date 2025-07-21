@@ -16,6 +16,19 @@
         <div class="container">
 
             <div class="movie-single-content">
+                <div class="movie-action">
+                    <div class="movie-action-left">
+                    </div>
+                    <div class="movie-action-right">
+                        <div class="action-item" @auth onclick="toggleFavorite('{{ $movie->id }}')" @endauth>
+                            <i class="@guest far @endguest @auth {{ $movie->likedByUsers->isNotEmpty() ? 'fas' : 'far' }} @endauth fa-heart" id="heart-{{ $movie->id }}"></i>
+                        </div>
+                        <div class="action-item"  onclick="shareMovie('{{ route('movie.short' , $movie->id ) }}', '{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}')">
+                            <i class="far fa-share-alt"></i>
+                        </div>
+{{--                        <span><i class="far fa-eye"></i>۲۵.۵k بازدید</span>--}}
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-4 col-lg-3">
                         <div class="movie-img">
@@ -190,83 +203,36 @@
                     <div class="movie-comment mt-50">
                         <div class="site-heading-inline">
                             <h2 class="site-title">دیدگاه‌ها</h2>
+                            @auth
                             <a href="#send-comment" class="theme-btn">نظر خود را به اشتراک بگذارید.<i class="far fa-paper-plane"></i></a>
+                            @endauth
                         </div>
                         <div class="comment-list">
-                            @foreach($movie->comments as $comment)
-                                <div class="comment-item">
-                                    <div class="comment-img">
-                                        <img src="{{ $comment->profile->avatarLink() }}" alt="{{ $comment->profile->name }}">
-                                    </div>
-                                    <div class="comment-content">
-                                        <div class="comment-author">
-                                            <div class="author-info" title="{{ verta($comment->created_at)->format('l d F Y H:i') }}">
-                                                <h5>{{ $comment->profile->name }}</h5>
-                                                <span><i class="far fa-clock"></i>{{ $comment->created_at->diffForHumans() }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="comment-text">
-                                            <p>{!! nl2br(e($comment->comment)) !!}</p>
-                                        </div>
-{{--                                        <div class="comment-action">--}}
-{{--                                            <a href="#"><i class="far fa-reply"></i>پاسخ</a>--}}
-{{--                                            <a href="#"><i class="far fa-thumbs-up"></i>۲.۵ هزار</a>--}}
-{{--                                            <a href="#"><i class="far fa-thumbs-down"></i>۱.۲ هزار</a>--}}
-{{--                                        </div>--}}
-                                    </div>
-                                </div>
-                                @if($comment->chields()->count() > 0)
-                                    @foreach($comment->chields as $child)
-                                        <div class="comment-item comment-reply">
-                                            <div class="comment-img">
-                                                <img src="{{ $child->profile->avatar }}" alt="{{ $child->profile->name }}">
-                                            </div>
-                                            <div class="comment-content">
-                                                <div class="comment-author">
-                                                    <div class="author-info" title="{{ verta($child->created_at)->format('l d F Y H:i') }}">
-                                                        <h5>{{ $child->profile->name }}</h5>
-                                                        <span><i class="far fa-clock"></i>{{ $child->created_at->diffForHumans() }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="comment-text">
-                                                    <p>{!! nl2br(e($child->comment)) !!}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            @endforeach
+                            @include('Component.comment' , ['comments' => $comments])
                         </div>
-{{--                        <div class="text-center">--}}
-{{--                            <a href="#" class="theme-btn"><span class="fas fa-rotate-left"></span>بارگزاری بیشتر</a>--}}
-{{--                        </div>--}}
+                        @if($comments->hasMorePages())
+                            <div class="text-center">
+                                <button class="theme-btn" id="load-more-comments" data-page="2" data-movie="{{ $movie->id }}">نمایش بیشتر <span class="fas fa-rotate-left"></span></button>
+                            </div>
+                        @endif
+                        @auth
                         <div class="comment-form" id="send-comment">
                             <h4>ارسال دیدگاه</h4>
-                            <form action="#">
+                            <form id="comment-form" action="{{ route('comments.store') }}" method="POST">
+                                @csrf
+                                <div id="comment-form-message" class="my-20"></div>
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control"
-                                                   placeholder="نام و نام خانوادگی*">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control"
-                                                   placeholder="ایمیل شما*">
-                                        </div>
-                                    </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <textarea class="form-control" rows="5"
-                                                      placeholder="دیدگاه و نظر شما*"></textarea>
+                                            <textarea name="body" class="form-control" rows="5" placeholder="دیدگاه و نظر شما*" required></textarea>
                                         </div>
-                                        <button type="submit" class="theme-btn">دیدگاه پست<i
-                                                class="far fa-paper-plane"></i></button>
+                                        <button type="submit" class="theme-btn">دیدگاه پست <i class="far fa-paper-plane"></i></button>
                                     </div>
                                 </div>
+                                <input type="hidden" name="movie_id" value="{{ $movie->id }}">
                             </form>
                         </div>
+                        @endauth
                     </div>
             </div>
         </div>

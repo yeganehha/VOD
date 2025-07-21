@@ -4,10 +4,12 @@ namespace App\Repositories\Movie;
 
 use App\Enums\EntityType;
 use App\Enums\PublishStatus;
+use App\Models\Movie\Comment;
 use App\Models\Movie\Movie;
 use App\Traits\DynamicRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * @method static Collection<Movie> lastItemslastItems($item = 1);
@@ -40,6 +42,19 @@ class MovieRepository
                 $q->where('profile_id', auth('web')->user()->currentProfile()->id);
             }]);
         }
+    }
+
+    public static function movieComment(Movie|string $movie , int $page = 1 , int $perPage = 15): LengthAwarePaginator
+    {
+        if ( $movie instanceof  Movie)
+            $query = $movie->comments();
+        else
+            $query = Comment::query()->where('movie_id', $movie);
+        return $query
+            ->where('publish_status', PublishStatus::Publish->value)
+            ->orderByDesc('created_at')
+            ->with('activeChild')
+            ->paginate($perPage ,  ['*'], 'page', $page);
     }
 
     private function _futureRelease(): void
