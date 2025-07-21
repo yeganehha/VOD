@@ -1,12 +1,12 @@
 @foreach($comments as $comment)
     <div class="comment-item">
         <div class="comment-img">
-            <img src="{{ $comment->profile->avatarLink() }}" alt="{{ $comment->profile->name }}">
+            <img src="{{ $comment->profile->avatarLink() }}" alt="{{ $comment->profile->name == 'خودم' ? 'مخفی' : $comment->profile->name }}">
         </div>
         <div class="comment-content">
             <div class="comment-author">
                 <div class="author-info" title="{{ verta($comment->created_at)->format('l d F Y H:i') }}">
-                    <h5>{{ $comment->profile->name }}</h5>
+                    <h5>{{ $comment->profile->name == 'خودم' ? 'مخفی' : $comment->profile->name }}</h5>
                     <span><i class="far fa-clock"></i>{{ $comment->created_at->diffForHumans() }}</span>
                 </div>
             </div>
