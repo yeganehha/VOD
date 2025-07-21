@@ -58,3 +58,4 @@ Route::get('/login' , [\App\Http\Controllers\ProfileController::class,'loginView
 Route::post('/login' , [\App\Http\Controllers\ProfileController::class,'login'])->name('loginProcess');
 Route::get('/logout' , [\App\Http\Controllers\ProfileController::class,'logout'])->name('logout')->middleware('auth:web');
 Route::view('/profile' , 'pages.Auth.profile')->name('profile')->middleware('auth:web');
+Route::post('/movies/{movie}/toggle-favorite', [MoviesController::class, 'toggleFavorite'])->name('movies.toggleFavorite');

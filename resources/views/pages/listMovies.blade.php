@@ -12,6 +12,12 @@
                         <div class="movie-img">
                             <img src="{{ $item->getImage(3,4) }}" style="aspect-ratio: 3 / 4;" alt="{{ $item->title ?? $item->entity->title }}">
                             <a href="{{ route('movie.short' , $item->id ) }}" class="movie-play"><i class="icon-play-3"></i></a>
+                            <div class="movie-action">
+                                <div class="action-item" onclick="toggleFavorite('{{ $item->id }}')">
+                                    <i class="@guest far @endguest @auth {{ $item->likedByUsers->isNotEmpty() ? 'fas' : 'far' }} @endauth fa-heart" id="heart-{{ $item->id }}"></i>
+                                </div>
+                                <div class="action-item"><i class="far fa-share-alt"></i></div>
+                            </div>
                         </div>
                         <div class="movie-content" dir="rtl">
                             <h6 class="movie-title"><a href="{{ route('movie.short' , $item->id ) }}">{{ $item->title ?? $item->entity->title }}</a></h6>

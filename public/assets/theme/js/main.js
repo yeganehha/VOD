@@ -367,3 +367,21 @@
         }
     }
 })(jQuery);
+
+function toggleFavorite(movieID) {
+    $.ajax({
+        url: '/movies/' + movieID + '/toggle-favorite',
+        type: 'POST',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            let heartIcon = $('#heart-' + movieID);
+            if (response.liked) {
+                heartIcon.removeClass('far').addClass('fas');
+            } else {
+                heartIcon.removeClass('fas').addClass('far');
+            }
+        }
+    });
+}

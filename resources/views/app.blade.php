@@ -42,6 +42,7 @@
             font-family: Vazirmatn;
         }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @stack('head')
 </head>
 <body class="home-4">

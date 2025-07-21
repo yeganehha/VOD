@@ -35,6 +35,11 @@ class MovieRepository
             ->with(['entity'  , 'entity.covers', 'entity.genres'])
             ->where('publish_date' , '<=', now()->addDays(7))
             ->whereHas('entity' , fn(Builder $builder) => $builder->where('publish_status' , PublishStatus::Publish->value));
+        if ( auth('web')->check() ){
+            $this->query->with(['likedByUsers' => function($q) {
+                $q->where('profile_id', auth('web')->user()->currentProfile()->id);
+            }]);
+        }
     }
 
     private function _futureRelease(): void

@@ -2204,36 +2204,38 @@ label {
 }
 
 .movie-item .movie-action{
-  position: absolute;
-  top: 50%;
-  right: 0px;
-  transform: translateY(-50%);
-  opacity: 0;
-  visibility: hidden;
-  transition: var(--transition);
-  z-index: 2;
+    position: absolute;
+    /* width: 100%; */
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+    z-index: 2;
 }
 
 .movie-item:hover .movie-action{
-  right: 10px;
-  opacity: 1;
-  visibility: visible;
+    bottom: 10px;
+    opacity: 1;
+    visibility: visible;
 }
 
-.movie-item .movie-action a{
-  display: block;
-  width: 36px;
-  height: 36px;
-  line-height: 35px;
-  background: var(--color-white);
-  border-radius: 50px;
-  text-align: center;
-  color: var(--theme-color);
-  margin: 10px;
-  box-shadow: var(--box-shadow);
+.movie-item .movie-action .action-item{
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    line-height: 44px;
+    text-align: center;
+    /* padding: 10px; */
+    background: var(--color-white);
+    border-radius: 50px;
+    color: var(--theme-color);
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
 }
 
-.movie-item .movie-action a:hover{
+.movie-item .movie-action .action-item:hover{
   background: var(--theme-color2);
   color: var(--color-white);
 }

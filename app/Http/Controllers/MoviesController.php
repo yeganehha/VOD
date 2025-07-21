@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\EntityType;
 use App\Models\Asset\Country;
+use App\Models\Movie\Movie;
+use App\Models\User\User;
 use App\Repositories\Movie\MovieRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -101,4 +103,29 @@ class MoviesController extends Controller
             ->paginate();
         return view('pages.categoryListMovies', compact(['movies', 'slides']));
     }
+
+    // MovieController.php
+
+    public function toggleFavorite(Movie $movie)
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['status' => 'unauthenticated'], 401);
+        }
+        $isLiked = $user->currentProfile()->favorites()->where('movie_id', $movie->id)->exists();
+        if ($isLiked) {
+            $user->currentProfile()->favorites()->detach($movie->id);
+            $liked = false;
+        } else {
+            $user->currentProfile()->favorites()->attach($movie->id);
+            $liked = true;
+        }
+        return response()->json([
+            'liked' => $liked,
+            'movie_id' => $movie->id,
+        ]);
+    }
+
+
 }

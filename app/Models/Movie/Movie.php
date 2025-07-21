@@ -4,6 +4,7 @@ namespace App\Models\Movie;
 
 use App\Enums\Audio;
 use App\Models\Asset\AgeRange;
+use App\Models\User\Profile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,6 +36,7 @@ use Illuminate\Support\Str;
  * @property Collection<MovieCover> $covers
  * @property Collection<MovieCrew> $crews
  * @property Collection<Comment> $comments
+ * @property Collection<Profile> $likedByUsers
  * @property int $episode
  * @property Carbon|null $deleted_at
  * @property Carbon $created_at
@@ -148,4 +150,8 @@ class Movie extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function likedByUsers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Profile::class, 'favorites');
+    }
 }
