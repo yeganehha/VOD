@@ -6,8 +6,9 @@
     <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
     <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
     <style>.filepond--credits{ display: none; }</style>
+    <div wire:ignore>
     <input type="file" id="filePond">
-
+    </div>
     <script>
         const input = document.getElementById('filePond');
         if (!input) {

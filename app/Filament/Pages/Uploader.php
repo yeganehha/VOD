@@ -42,6 +42,7 @@ class Uploader extends Page implements HasForms, HasTable
             ->query(Filepond::query()->whereNotNull('filename')->where('is_used',false))
             ->modelLabel('آپلود')
             ->pluralModelLabel('آپلود ها')
+            ->poll('5s')
             ->columns([
                 TextColumn::make('filename')
                     ->searchable()
@@ -55,7 +56,7 @@ class Uploader extends Page implements HasForms, HasTable
                 TextColumn::make('created_at')
                     ->formatStateUsing(fn($record) => $record->created_at->diffForHumans())
                     ->label('شروع آپلود در'),
-                TextColumn::make('filepath'),
+//                TextColumn::make('filepath'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make('trash')
@@ -66,6 +67,7 @@ class Uploader extends Page implements HasForms, HasTable
                 RestoreAction::make('forceDelete'),
                 Tables\Actions\Action::make('setToMovie')
                     ->label('اختصاص به فیلم')
+                    ->icon('carbon-video-add')
                     ->form([
                         Select::make('movieID')
                             ->label('فیلم')
