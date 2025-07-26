@@ -37,6 +37,7 @@ use Illuminate\Support\Str;
  * @property Collection<MovieCrew> $crews
  * @property Collection<Comment> $comments
  * @property Collection<Profile> $likedByUsers
+ * @property Collection<MovieFiles> $files
  * @property int $episode
  * @property Carbon|null $deleted_at
  * @property Carbon $created_at
@@ -136,6 +137,11 @@ class Movie extends Model
     public function covers(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(MovieCover::class);
+    }
+
+    public function files(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(MovieFiles::class);
     }
 
 

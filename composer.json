@@ -25,6 +25,7 @@
         "mohamedsabil83/filament-forms-tinyeditor": "^2.4",
         "mokhosh/filament-jalali": "^4.10",
         "noxoua/filament-activity-log": "^2.2",
+        "rahulhaque/laravel-filepond": "12.0",
         "sadegh19b/laravel-persian-validation": "^2.0"
     },
     "require-dev": {
