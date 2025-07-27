@@ -376,7 +376,7 @@ function toggleFavorite(movieID) {
             _token: $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            let heartIcon = $('#heart-' + movieID);
+            let heartIcon = $('.heart-' + movieID);
             if (response.liked) {
                 heartIcon.removeClass('far').addClass('fas');
             } else {

@@ -16,26 +16,26 @@
         <div class="container">
 
             <div class="movie-single-content">
-                <div class="movie-action">
-                    <div class="movie-action-left">
-                    </div>
-                    <div class="movie-action-right">
-                        <div class="action-item" @auth onclick="toggleFavorite('{{ $movie->id }}')" @endauth>
-                            <i class="@guest far @endguest @auth {{ $movie->likedByUsers->isNotEmpty() ? 'fas' : 'far' }} @endauth fa-heart" id="heart-{{ $movie->id }}"></i>
-                        </div>
-                        <div class="action-item"  onclick="shareMovie('{{ route('movie.short' , $movie->id ) }}', '{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}')">
-                            <i class="far fa-share-alt"></i>
-                        </div>
+{{--                <div class="movie-action">--}}
+{{--                    <div class="movie-action-left">--}}
+{{--                    </div>--}}
+{{--                    <div class="movie-action-right d-none d-md-flex">--}}
+{{--                        <div class="action-item" @auth onclick="toggleFavorite('{{ $movie->id }}')" @endauth>--}}
+{{--                            <i class="@guest far @endguest @auth {{ $movie->likedByUsers->isNotEmpty() ? 'fas' : 'far' }} @endauth fa-heart heart-{{ $movie->id }}"></i>--}}
+{{--                        </div>--}}
+{{--                        <div class="action-item"  onclick="shareMovie('{{ route('movie.short' , $movie->id ) }}', '{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}')">--}}
+{{--                            <i class="far fa-share-alt"></i>--}}
+{{--                        </div>--}}
 {{--                        <span><i class="far fa-eye"></i>۲۵.۵k بازدید</span>--}}
-                    </div>
-                </div>
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="row">
                     <div class="col-md-4 col-lg-3">
                         <div class="movie-img">
                             <img style="width: 100%;aspect-ratio: 3/4" src="{{ $movie->getImage(3,4) }}"  alt="{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}">
                         </div>
                     </div>
-                    <div class="col-md-8 col-lg-9 border-end1">
+                    <div class="col-md-8 col-lg-6 border-end">
                         <div class="movie-info">
                             <h4 class="movie-name d-flex justify-items-center">
                                 {{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}
@@ -123,17 +123,19 @@
                             </div>
                         </div>
                     </div>
-{{--                    <div class="col-md-7 col-lg-3">--}}
-{{--                        <div class="movie-download">--}}
-{{--                            <h5>دانلود:</h5>--}}
-{{--                            <a href="#" class="theme-btn"><span--}}
-{{--                                    class="fas fa-arrow-down-to-arc"></span>دانلود: 576p</a>--}}
-{{--                            <a href="#" class="theme-btn"><span--}}
-{{--                                    class="fas fa-arrow-down-to-arc"></span>دانلود: 720p</a>--}}
-{{--                            <a href="#" class="theme-btn"><span--}}
-{{--                                    class="fas fa-arrow-down-to-arc"></span>دانلود: 1080p</a>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+                    <div class="col-md-7 col-lg-3">
+                        <div class="movie-download">
+{{--                            <h5></h5>--}}
+                            <a href="#" class="theme-btn"><span
+                                    class="fas fa-play-circle"></span> نمایش آنلاین </a>
+                            <div class="theme-btn" @auth onclick="toggleFavorite('{{ $movie->id }}')" @endauth>
+                                <i class="@guest far @endguest @auth {{ $movie->likedByUsers->isNotEmpty() ? 'fas' : 'far' }} @endauth fa-heart heart-{{ $movie->id }}"></i> افزودن به علاقه مندی ها
+                            </div>
+                            <div class="theme-btn"  onclick="shareMovie('{{ route('movie.short' , $movie->id ) }}', '{{ $movie->entity->pre_title }} {{ $movie->title ?? $movie->entity->title }}')">
+                                <i class="far fa-share-alt"></i> اشتراک گذاری
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12 mt-3">
                         <div class="testimonial-slider owl-carousel owl-theme">
                             @foreach($movie->crew as $crew)
