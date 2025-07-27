@@ -61,3 +61,6 @@ Route::get('/logout' , [\App\Http\Controllers\ProfileController::class,'logout']
 Route::view('/profile' , 'pages.Auth.profile')->name('profile')->middleware('auth:web');
 Route::post('/movies/{movie}/toggle-favorite', [MoviesController::class, 'toggleFavorite'])->name('movies.toggleFavorite');
 Route::post('/comments/store', [MoviesController::class, 'storeComment'])->name('comments.store')->middleware('auth:web');
+Route::get('/v/{uuid}' , [\App\Http\Controllers\StreamController::class,'view'])->name('movie.view')->middleware('auth:web');
+Route::get('/v/{uuid}/stream' , [\App\Http\Controllers\StreamController::class,'stream'])->name('movie.stream')->middleware('auth:web');
+Route::post('/v/{uuid}/stream/save-watch-position' , [\App\Http\Controllers\StreamController::class,'updateWatchPosition'])->name('movie.updateWatchPosition')->middleware('auth:web');

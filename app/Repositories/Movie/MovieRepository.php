@@ -17,6 +17,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * @method static MovieRepository series();
  * @method static MovieRepository movie();
  * @method static MovieRepository singleShow($entitySlug , $episode, $season);
+ * @method static MovieRepository singleMovieShow($movieID);
  * @method static MovieRepository searchByTag(array $tags,string|null $queryString = null);
  * @method static MovieRepository filterByType(array|EntityType $value)
  * @method static MovieRepository filterByLanguage(array|string $values)
@@ -80,6 +81,12 @@ class MovieRepository
             ->wherehas('entity' , fn($builder) => $builder->where('slug' , $entitySlug))
             ->where('episode' , $episode)
             ->where('season' , $season);
+    }
+    private function _singleMovieShow($movieID ): void
+    {
+        $this->query
+            ->with(['entity'  ,'covers' , 'entity.covers', 'entity.genres', 'entity.countries'])
+            ->where('id' , $movieID);
     }
     private function _productOfYear(int $year): void
     {

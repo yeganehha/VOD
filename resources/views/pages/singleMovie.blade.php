@@ -126,7 +126,7 @@
                     <div class="col-md-7 col-lg-3">
                         <div class="movie-download">
 {{--                            <h5></h5>--}}
-                            <a href="#" class="theme-btn"><span
+                            <a href="{{ route('movie.view' ,  $movie->id ) }}" class="theme-btn"><span
                                     class="fas fa-play-circle"></span> نمایش آنلاین </a>
                             <div class="theme-btn" @auth onclick="toggleFavorite('{{ $movie->id }}')" @endauth>
                                 <i class="@guest far @endguest @auth {{ $movie->likedByUsers->isNotEmpty() ? 'fas' : 'far' }} @endauth fa-heart heart-{{ $movie->id }}"></i> افزودن به علاقه مندی ها

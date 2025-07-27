@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
  * @property AgeRange $ageRange
  * @property boolean $main_user
  * @property Collection<Movie> $favorites
+ * @property Collection<ViewHistory> $history
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -57,5 +58,9 @@ class Profile extends Model
     public function favorites(): BelongsToMany
     {
         return $this->belongsToMany(Movie::class,'favorites');
+    }
+    public function history(): BelongsToMany
+    {
+        return $this->belongsToMany(ViewHistory::class,'view_histories');
     }
 }
