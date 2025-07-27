@@ -87,17 +87,17 @@ class Uploader extends Page implements HasForms, HasTable
                             $movie = Movie::query()->findOrFail($data['movieID']);
                             $ratio = RatioType::from($data['ratio_type']);
                             Storage::makeDirectory('private/movies/');
-                            Storage::makeDirectory('private/movies/' . str($movie->id)->substr(0, 2));
-                            Storage::makeDirectory('private/movies/' . str($movie->id)->substr(0, 2) . '/' . str($movie->id)->substr(0, 5));
-                            Storage::makeDirectory('private/movies/' . str($movie->id)->substr(0, 2) . '/' . str($movie->id)->substr(0, 5) . '/' . $movie->id);
-                            Storage::makeDirectory('private/movies/' . str($movie->id)->substr(0, 2) . '/' . str($movie->id)->substr(0, 5) . '/' . $movie->id . '/' . $ratio->name);
-                            File::move(storage_path('app/'.$record->filepath), storage_path('app/private/movies/' . str($movie->id)->substr(0, 2) . '/' . str($movie->id)->substr(0, 5) . '/' . $movie->id . '/' . $ratio->name.'/'.$record->filename));
+                            Storage::makeDirectory('private/movies/' . str($movie->id)->substr(0, 2)->lower() );
+                            Storage::makeDirectory('private/movies/' . str($movie->id)->substr(0, 2)->lower() . '/' . str($movie->id)->substr(0, 5)->lower());
+                            Storage::makeDirectory('private/movies/' . str($movie->id)->substr(0, 2)->lower() . '/' . str($movie->id)->substr(0, 5)->lower() . '/' . $movie->id);
+                            Storage::makeDirectory('private/movies/' . str($movie->id)->substr(0, 2)->lower() . '/' . str($movie->id)->substr(0, 5)->lower() . '/' . $movie->id . '/' . $ratio->name);
+                            File::move(storage_path('app/'.$record->filepath), storage_path('app/private/movies/' . str($movie->id)->substr(0, 2)->lower() . '/' . str($movie->id)->substr(0, 5)->lower() . '/' . $movie->id . '/' . $ratio->name.'/'.$record->filename));
                             $record->is_used = true;
                             $record->save();
                             $movie->files()->create([
                                 'movie_id' => $movie->id,
                                 'ratio_type' => $ratio->value,
-                                'path' => 'private/movies/' . str($movie->id)->substr(0, 2) . '/' . str($movie->id)->substr(0, 5) . '/' . $movie->id . '/' . $ratio->name.'/'.$record->filename
+                                'path' => 'private/movies/' . str($movie->id)->substr(0, 2)->lower() . '/' . str($movie->id)->substr(0, 5)->lower() . '/' . $movie->id . '/' . $ratio->name.'/'.$record->filename
                             ]);
                             Notification::make()
                                 ->title('فیلم با موفقت اختصاص یافت.')

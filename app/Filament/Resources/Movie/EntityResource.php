@@ -101,6 +101,7 @@ class EntityResource extends Resource
                         ->prefix('در ساعت'),
                 ])->label('اکران هر هفته'),
                 Forms\Components\TextInput::make('pro_year')
+                    ->numeric()
                     ->minValue(1200)
                     ->maxValue(now()->addYear()->year)
                     ->ltr()
