@@ -18,30 +18,77 @@
     <style>
         body {
             font-family: Vazirmatn;
+            margin: 0;
+        }
+
+        .plyr__glass-link {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .plyr--hide-controls .plyr__glass-link {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .plyr__glass-link:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @stack('head')
 </head>
-<body style="margin: 0">
-<video id="player" playsinline controls data-poster="/path/to/poster.jpg">
+<body>
+
+<video id="player" playsinline controls data-poster="/path/to/poster.jpg" style="width: 100%; height: auto;">
     <source src="{{ route('movie.stream', ['uuid' => $movie->id]) }}" type="video/mp4">
 </video>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const el = document.getElementById("player");
-        const width = Math.floor(el.offsetWidth);
-        const height = Math.floor(el.offsetHeight);
+        const video = document.getElementById("player");
         const entityId = "{{ $movie->id }}";
+
+        // افزودن پوستر
+        const width = Math.floor(video.offsetWidth);
+        const height = Math.floor(video.offsetHeight);
         let imageUrl = `/movie-cover/${width}/${height}/${entityId}`;
-        el.setAttribute("data-poster", imageUrl);
-        const player = new Plyr('#player');
+        video.setAttribute("data-poster", imageUrl);
+
+        // Plyr init
+        const player = new Plyr(video);
+
+        // لینک شیشه‌ای به سایت اصلی
+        const glassLink = document.createElement("a");
+        glassLink.href = "{{ $movie->getLink() }}";
+        glassLink.innerText = "بازگشت به صفحه اطلاعات";
+        glassLink.className = "plyr__glass-link";
+
+        // اضافه به container اصلی Plyr
+        const plyrContainer = video.closest(".plyr");
+        plyrContainer.style.position = 'relative'; // لازم برای absolute
+        plyrContainer.appendChild(glassLink);
+
+        // تنظیم ادامه پخش از آخرین نقطه
         const lastSeenTime = {{ $lastSeenTime }};
         player.once('loadedmetadata', () => {
             if (lastSeenTime > 0) {
                 player.currentTime = lastSeenTime;
             }
         });
+
+        // ذخیره موقعیت پخش
         let lastSavedTime = 0;
         player.on('timeupdate', () => {
             const current = Math.floor(player.currentTime);
@@ -61,5 +108,6 @@
         });
     });
 </script>
+
 </body>
 </html>
