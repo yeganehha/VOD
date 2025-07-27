@@ -109,7 +109,18 @@
                                     class="icon-moon-2"></i></button>
                         </div>
                         <div class="nav-right-btn">
+                            @guest('web')
                             <a href="{{ route('login') }}" class="theme-btn"><i class="far fa-sign-in"></i> ناحیه کاربری</a>
+                            @endguest
+                            @auth('web')
+                                <a href="{{ route('login') }}" class="theme-btn">
+                                    <img src="{{ auth()->user()->currentProfile()->avatarLink() }}" style="aspect-ratio: 1/1; max-height: 25px;border-radius: 50%" alt="">
+                                    <span class="mx-2">
+{{--                                        {{ auth()->user()->currentProfile()->name }}--}}
+                                        ناحیه کاربری
+                                    </span>
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 </div>

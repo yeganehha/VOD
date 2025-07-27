@@ -330,6 +330,20 @@
     $(".profile-file-btn").on('click', function (e) {
         $(this).next('.profile-file-input').click();
     });
+    $(".profile-file-input").on('change', function (e) {
+            var file = $(this).get(0).files[0];
+
+            if(file){
+                var reader = new FileReader();
+
+                reader.onload = function(){
+                    $("#previewImg").attr("src", reader.result);
+                }
+
+                reader.readAsDataURL(file);
+            }
+
+    });
     const getMode = localStorage.getItem('theme');
     if (getMode === 'dark') {
         $('body').addClass('theme-mode-variables');

@@ -64,3 +64,5 @@ Route::post('/comments/store', [MoviesController::class, 'storeComment'])->name(
 Route::get('/v/{uuid}' , [\App\Http\Controllers\StreamController::class,'view'])->name('movie.view')->middleware('auth:web');
 Route::get('/v/{uuid}/stream' , [\App\Http\Controllers\StreamController::class,'stream'])->name('movie.stream')->middleware('auth:web');
 Route::post('/v/{uuid}/stream/save-watch-position' , [\App\Http\Controllers\StreamController::class,'updateWatchPosition'])->name('movie.updateWatchPosition')->middleware('auth:web');
+Route::put('/profile/update', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update')->middleware('auth');
+Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->middleware('auth')->name('profile.updatePassword');

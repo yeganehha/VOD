@@ -45,6 +45,10 @@
         .plyr__glass-link:hover {
             background: rgba(255, 255, 255, 0.2);
         }
+
+        .plyr__video-wrapper{
+            max-height: 100dvH;
+        }
     </style>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @stack('head')

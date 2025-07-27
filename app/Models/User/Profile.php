@@ -7,6 +7,7 @@ use App\Models\Movie\Movie;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -59,8 +60,8 @@ class Profile extends Model
     {
         return $this->belongsToMany(Movie::class,'favorites');
     }
-    public function history(): BelongsToMany
+    public function history(): HasMany
     {
-        return $this->belongsToMany(ViewHistory::class,'view_histories');
+        return $this->hasMany(ViewHistory::class)->latest();
     }
 }
