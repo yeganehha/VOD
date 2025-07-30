@@ -31,7 +31,7 @@ class Filepond extends Model
         parent::boot();
         static::forceDeleting(function (Model $model) {
             /** @var self $model */
-            if ( File::isDirectory(storage_path('app/'.dirname($model->filepath))) )
+            if ( File::isDirectory(storage_path('app/'.dirname($model->filepath))) and $model->filepath )
             File::deleteDirectory(storage_path('app/'.dirname($model->filepath)));
         });
     }
